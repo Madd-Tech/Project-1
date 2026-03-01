@@ -1,0 +1,77 @@
+<template>
+  <footer class="border-t border-white/5 pt-16 pb-8" id="footer">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <!-- Brand -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 bg-gradient-to-br from-electric to-neon rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <span class="text-xl font-bold font-[Outfit]">
+              <span class="text-white">Babuihan</span><span class="text-electric">Store</span>
+            </span>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-6">
+            Toko sepatu premium online terpercaya di Indonesia. Kualitas terjamin, harga terbaik.
+          </p>
+          <div class="flex items-center gap-3">
+            <a
+              v-for="social in socials"
+              :key="social.name"
+              :href="social.url"
+              class="w-10 h-10 glass rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+            >
+              <span class="text-sm">{{ social.icon }}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div v-for="section in footerSections" :key="section.title">
+          <h4 class="text-white font-semibold font-[Outfit] mb-4">{{ section.title }}</h4>
+          <ul class="space-y-3">
+            <li v-for="link in section.links" :key="link">
+              <a href="#" class="text-gray-400 text-sm hover:text-neon transition-colors duration-300">{{ link }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-gray-500 text-sm">© 2026 HaiStore. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-gray-500 text-sm hover:text-gray-300 transition-colors">Privacy Policy</a>
+          <a href="#" class="text-gray-500 text-sm hover:text-gray-300 transition-colors">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</template>
+
+<script setup>
+const socials = [
+  { name: 'Instagram', icon: 'IG', url: '#' },
+  { name: 'Twitter', icon: 'X', url: '#' },
+  { name: 'Facebook', icon: 'FB', url: '#' },
+  { name: 'TikTok', icon: 'TT', url: '#' },
+];
+
+const footerSections = [
+  {
+    title: 'Produk',
+    links: ['Running Shoes', 'Lifestyle', 'Basketball', 'Training', 'Limited Edition', 'Sale'],
+  },
+  {
+    title: 'Layanan',
+    links: ['Lacak Pesanan', 'Pengembalian', 'Ukuran Sepatu', 'FAQ', 'Hubungi Kami'],
+  },
+  {
+    title: 'Perusahaan',
+    links: ['Tentang Kami', 'Karir', 'Blog', 'Press Kit', 'Affiliate'],
+  },
+];
+</script>

@@ -1,3 +1,27 @@
 <template>
-  <h1 class="text-3xl font-bold text-blue-600">Hello from Inertia + Vue 3!</h1>
+  <div class="min-h-screen bg-dark-900">
+    <NavBar />
+    <HeroSection />
+    <BrandMarquee />
+    <ProductSection />
+    <CategorySection />
+    <PromoSection />
+    <FeatureSection />
+    <TestimonialSection />
+    <NewsletterSection />
+    <FooterSection />
+  </div>
 </template>
+
+<script setup>
+import NavBar from './Components/NavBar.vue';
+import HeroSection from './Components/HeroSection.vue';
+import BrandMarquee from './Components/BrandMarquee.vue';
+import ProductSection from './Components/ProductSection.vue';
+import CategorySection from './Components/CategorySection.vue';
+import PromoSection from './Components/PromoSection.vue';
+import FeatureSection from './Components/FeatureSection.vue';
+import TestimonialSection from './Components/TestimonialSection.vue';
+import NewsletterSection from './Components/NewsletterSection.vue';
+import FooterSection from './Components/FooterSection.vue';
+</script>
