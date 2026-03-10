@@ -49,6 +49,9 @@
 
                     <!-- Products Icon -->
                     <svg v-else-if="item.label === 'Products'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+
+                    <!-- Stock Icon -->
+                    <svg v-else-if="item.label === 'Stock'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <span class="z-10">{{ item.label }}</span>
             </Link>
@@ -83,6 +86,7 @@ const navItems = [
     { label: 'Dashboard', href: '/admin/dashboard' },
     { label: 'Categories', href: '/admin/categories' },
     { label: 'Products', href: '/admin/products' },
+    { label: 'Stock', href: '/admin/stock' },
 ];
 
 const isActive = (href) => {

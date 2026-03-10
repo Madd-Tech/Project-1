@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Admin\StockController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', CategoriesController::class)->except(['create', 'show', 'edit']);
     Route::post('products/{product}', [ProductsController::class, 'update'])->name('products.update'); // Override put due to multipart/form-data
     Route::resource('products', ProductsController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+    Route::put('/stock/{product}', [StockController::class, 'update'])->name('stock.update');
 });
