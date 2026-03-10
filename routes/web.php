@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\StockMovController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -30,4 +31,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', ProductsController::class)->except(['create', 'show', 'edit', 'update']);
     Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
     Route::put('/stock/{product}', [StockController::class, 'update'])->name('stock.update');
+    Route::get('/stockmov', [StockMovController::class, 'index'])->name('stockmov.index');
+    Route::post('/stockmov', [StockMovController::class, 'store'])->name('stockmov.store');
 });
