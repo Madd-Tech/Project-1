@@ -9,12 +9,16 @@ use App\Http\Controllers\Admin\StockMovController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+use App\Models\Product;
+use App\Models\Category;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    $products = Product::with('category')->where('status', 'active')->latest()->take(8)->get();
+    $categories = Category::withCount('products')->take(6)->get();
+    return Inertia::render('Home', [
+        'products' => $products,
+        'categories' => $categories
+    ]);
 });
 
 Route::middleware('guest')->group(function () {

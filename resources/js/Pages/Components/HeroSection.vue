@@ -40,7 +40,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
-            <a
+            <!-- <a
               href="#about"
               class="inline-flex items-center justify-center gap-2 px-8 py-4 glass text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300"
               id="hero-about-btn"
@@ -49,7 +49,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
               </svg>
               Watch Story
-            </a>
+            </a> -->
           </div>
 
           <!-- Stats -->
@@ -78,7 +78,7 @@
               class="relative w-full max-w-md lg:max-w-lg animate-float drop-shadow-[0_20px_60px_rgba(59,130,246,0.3)]"
             >
             <!-- Floating badges -->
-            <div class="absolute top-8 right-0 glass rounded-2xl px-4 py-3 animate-fade-in-up" style="animation-delay: 0.6s;">
+            <!-- <div class="absolute top-8 right-0 glass rounded-2xl px-4 py-3 animate-fade-in-up" style="animation-delay: 0.6s;">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-neon/20 rounded-lg flex items-center justify-center">
                   <svg class="w-4 h-4 text-neon" fill="currentColor" viewBox="0 0 20 20">
@@ -90,7 +90,7 @@
                   <div class="text-gray-400 text-xs">2.5k+ Reviews</div>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="absolute bottom-12 -left-4 glass rounded-2xl px-4 py-3 animate-fade-in-up" style="animation-delay: 0.9s;">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-amber/20 rounded-lg flex items-center justify-center">
@@ -122,9 +122,9 @@
 <script setup>
 const heroImage = '/images/hero-shoe.png';
 
-const stats = [
-  { value: '50K+', label: 'Pelanggan' },
-  { value: '200+', label: 'Brand' },
-  { value: '99%', label: 'Kepuasan' },
-];
+// const stats = [
+//   { value: '50K+', label: 'Pelanggan' },
+//   { value: '200+', label: 'Brand' },
+//   { value: '99%', label: 'Kepuasan' },
+// ];
 </script>

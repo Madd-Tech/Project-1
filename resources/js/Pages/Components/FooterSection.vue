@@ -42,7 +42,7 @@
 
       <!-- Bottom Bar -->
       <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-gray-500 text-sm">© 2026 HaiStore. All rights reserved.</p>
+        <p class="text-gray-500 text-sm">© 2026 BabuihanStore. All rights reserved.</p>
         <div class="flex items-center gap-6">
           <a href="#" class="text-gray-500 text-sm hover:text-gray-300 transition-colors">Privacy Policy</a>
           <a href="#" class="text-gray-500 text-sm hover:text-gray-300 transition-colors">Terms of Service</a>

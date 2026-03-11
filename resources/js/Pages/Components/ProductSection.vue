@@ -33,7 +33,7 @@
       <!-- Product Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="product-grid">
         <div
-          v-for="(product, index) in products"
+          v-for="(product, index) in filteredProducts"
           :key="product.id"
           class="glass-card rounded-3xl overflow-hidden group"
           :style="{ animationDelay: `${index * 0.1}s` }"
@@ -42,15 +42,16 @@
           <div class="relative p-6 pb-0 overflow-hidden">
             <div class="absolute top-4 left-4 z-10">
               <span
-                v-if="product.badge"
-                :class="[
-                  'px-3 py-1 text-xs font-bold rounded-lg',
-                  product.badge === 'NEW' ? 'bg-neon/20 text-neon' :
-                  product.badge === 'HOT' ? 'bg-red-500/20 text-red-400' :
-                  'bg-amber/20 text-amber'
-                ]"
+                v-if="product.stock <= 5 && product.stock > 0"
+                class="px-3 py-1 text-xs font-bold rounded-lg bg-amber/20 text-amber"
               >
-                {{ product.badge }}
+                Limited Stock
+              </span>
+              <span
+                v-else-if="product.stock === 0"
+                class="px-3 py-1 text-xs font-bold rounded-lg bg-red-500/20 text-red-400"
+              >
+                Sold Out
               </span>
             </div>
             <button class="absolute top-4 right-4 z-10 p-2 glass rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/10">
@@ -59,7 +60,7 @@
               </svg>
             </button>
             <img
-              :src="product.image"
+              :src="product.image ? '/storage/' + product.image : '/images/placeholder.png'"
               :alt="product.name"
               class="w-full h-48 object-contain transform group-hover:scale-110 group-hover:rotate-[-5deg] transition-all duration-500"
             >
@@ -67,18 +68,17 @@
 
           <!-- Info -->
           <div class="p-6 pt-4">
-            <span class="text-xs text-gray-500 uppercase tracking-wider">{{ product.category }}</span>
+            <span class="text-xs text-gray-500 uppercase tracking-wider">{{ product.category ? product.category.name : 'Uncategorized' }}</span>
             <h3 class="text-white font-semibold text-lg mt-1 mb-2 group-hover:text-electric-light transition-colors">{{ product.name }}</h3>
             <div class="flex items-center gap-1 mb-3">
-              <svg v-for="star in 5" :key="star" class="w-3.5 h-3.5" :class="star <= product.rating ? 'text-amber' : 'text-gray-600'" fill="currentColor" viewBox="0 0 20 20">
+              <svg v-for="star in 5" :key="star" class="w-3.5 h-3.5 text-amber" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span class="text-xs text-gray-500 ml-1">({{ product.reviews }})</span>
+              <span class="text-xs text-gray-500 ml-1">(4.8)</span>
             </div>
             <div class="flex items-center justify-between">
               <div>
-                <span v-if="product.oldPrice" class="text-sm text-gray-500 line-through mr-2">Rp {{ product.oldPrice }}</span>
-                <span class="text-lg font-bold text-white">Rp {{ product.price }}</span>
+                <span class="text-lg font-bold text-white">Rp {{ formatPrice(product.price) }}</span>
               </div>
               <button class="p-3 bg-gradient-to-r from-electric to-neon rounded-xl text-white hover:shadow-lg hover:shadow-electric/25 transition-all duration-300 transform hover:scale-110 active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,53 +108,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+
+const props = defineProps({
+  products: {
+    type: Array,
+    default: () => []
+  },
+  categories: {
+    type: Array,
+    default: () => []
+  }
+});
 
 const activeFilter = ref('All');
-const filterCategories = ['All', 'Running', 'Lifestyle', 'Basketball', 'Retro'];
 
-const products = [
-  {
-    id: 1,
-    name: 'AeroSpeed Runner X',
-    category: 'Running',
-    price: '1.299.000',
-    oldPrice: '1.899.000',
-    rating: 5,
-    reviews: 128,
-    badge: 'HOT',
-    image: '/images/products/shoe-1.png',
-  },
-  {
-    id: 2,
-    name: 'UrbanFlex Pro',
-    category: 'Lifestyle',
-    price: '999.000',
-    rating: 4,
-    reviews: 89,
-    badge: 'NEW',
-    image: '/images/products/shoe-2.png',
-  },
-  {
-    id: 3,
-    name: 'SkyDunk Elite',
-    category: 'Basketball',
-    price: '1.599.000',
-    oldPrice: '2.199.000',
-    rating: 5,
-    reviews: 64,
-    badge: 'SALE',
-    image: '/images/products/shoe-3.png',
-  },
-  {
-    id: 4,
-    name: 'RetroWave Classic',
-    category: 'Retro',
-    price: '849.000',
-    rating: 4,
-    reviews: 156,
-    badge: 'NEW',
-    image: '/images/products/shoe-4.png',
-  },
-];
+const filterCategories = computed(() => {
+  const cats = props.categories.map(c => c.name);
+  return ['All', ...cats];
+});
+
+const filteredProducts = computed(() => {
+  if (activeFilter.value === 'All') {
+    return props.products;
+  }
+  return props.products.filter(p => p.category && p.category.name === activeFilter.value);
+});
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('id-ID').format(price);
+};
 </script>

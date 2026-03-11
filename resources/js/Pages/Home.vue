@@ -3,12 +3,12 @@
     <NavBar />
     <HeroSection />
     <BrandMarquee />
-    <ProductSection />
-    <CategorySection />
-    <PromoSection />
+    <ProductSection :products="products" :categories="categories" />
+    <CategorySection :categories="categories" />
+    <!-- <PromoSection /> -->
     <FeatureSection />
-    <TestimonialSection />
-    <NewsletterSection />
+    <!-- <TestimonialSection /> -->
+    <!-- <NewsletterSection /> -->
     <FooterSection />
   </div>
 </template>
@@ -24,4 +24,9 @@ import FeatureSection from './Components/FeatureSection.vue';
 import TestimonialSection from './Components/TestimonialSection.vue';
 import NewsletterSection from './Components/NewsletterSection.vue';
 import FooterSection from './Components/FooterSection.vue';
+
+defineProps({
+  products: Array,
+  categories: Array
+});
 </script>

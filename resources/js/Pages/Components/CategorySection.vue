@@ -12,17 +12,17 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="categories-grid">
         <div
-          v-for="category in categories"
-          :key="category.name"
+          v-for="(category, index) in categories"
+          :key="category.id"
           class="glass-card rounded-3xl p-8 text-center group cursor-pointer relative overflow-hidden"
         >
-          <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500" :class="category.gradient"></div>
-          <div :class="['w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110', category.iconBg]">
-            <span class="text-3xl">{{ category.icon }}</span>
+          <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500" :class="getCategoryStyles(index).gradient"></div>
+          <div :class="['w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110', getCategoryStyles(index).iconBg]">
+            <span class="text-3xl">{{ getCategoryStyles(index).icon }}</span>
           </div>
           <h3 class="text-xl font-[Outfit] font-bold text-white mb-2">{{ category.name }}</h3>
-          <p class="text-gray-400 text-sm mb-4">{{ category.desc }}</p>
-          <span :class="['text-sm font-semibold', category.textColor]">{{ category.count }} Products →</span>
+          <p class="text-gray-400 text-sm mb-4">{{ getCategoryStyles(index).desc }}</p>
+          <span :class="['text-sm font-semibold', getCategoryStyles(index).textColor]">{{ category.products_count || 0 }} Products →</span>
         </div>
       </div>
     </div>
@@ -30,60 +30,22 @@
 </template>
 
 <script setup>
-const categories = [
-  {
-    name: 'Running Shoes',
-    desc: 'Sepatu lari yang ringan dan responsif untuk performa terbaik.',
-    icon: '🏃',
-    count: 45,
-    iconBg: 'bg-electric/20',
-    textColor: 'text-electric-light',
-    gradient: 'from-electric to-blue-900',
-  },
-  {
-    name: 'Lifestyle',
-    desc: 'Gaya sehari-hari yang nyaman dan stylish.',
-    icon: '👟',
-    count: 62,
-    iconBg: 'bg-neon/20',
-    textColor: 'text-neon-light',
-    gradient: 'from-neon to-emerald-900',
-  },
-  {
-    name: 'Basketball',
-    desc: 'Performa tinggi di lapangan dengan support maksimal.',
-    icon: '🏀',
-    count: 38,
-    iconBg: 'bg-amber/20',
-    textColor: 'text-amber-light',
-    gradient: 'from-amber to-orange-900',
-  },
-  {
-    name: 'Training',
-    desc: 'Fleksibel dan stabil untuk latihan cross-training.',
-    icon: '💪',
-    count: 29,
-    iconBg: 'bg-red-500/20',
-    textColor: 'text-red-400',
-    gradient: 'from-red-500 to-red-900',
-  },
-  {
-    name: 'Casual Sneakers',
-    desc: 'Sneaker kasual untuk aktivitas santai sehari-hari.',
-    icon: '✨',
-    count: 73,
-    iconBg: 'bg-purple-500/20',
-    textColor: 'text-purple-400',
-    gradient: 'from-purple-500 to-purple-900',
-  },
-  {
-    name: 'Limited Edition',
-    desc: 'Koleksi eksklusif edisi terbatas yang langka.',
-    icon: '💎',
-    count: 12,
-    iconBg: 'bg-pink-500/20',
-    textColor: 'text-pink-400',
-    gradient: 'from-pink-500 to-pink-900',
-  },
-];
+const props = defineProps({
+  categories: {
+    type: Array,
+    default: () => []
+  }
+});
+
+const getCategoryStyles = (index) => {
+  const styles = [
+    { icon: '🏃', iconBg: 'bg-electric/20', textColor: 'text-electric-light', gradient: 'from-electric to-blue-900', desc: 'Sepatu lari yang ringan dan responsif for performance.' },
+    { icon: '👟', iconBg: 'bg-neon/20', textColor: 'text-neon-light', gradient: 'from-neon to-emerald-900', desc: 'Gaya sehari-hari yang nyaman dan stylish.' },
+    { icon: '🏀', iconBg: 'bg-amber/20', textColor: 'text-amber-light', gradient: 'from-amber to-orange-900', desc: 'Performa tinggi di lapangan dengan support maksimal.' },
+    { icon: '💪', iconBg: 'bg-red-500/20', textColor: 'text-red-400', gradient: 'from-red-500 to-red-900', desc: 'Fleksibel dan stabil untuk latihan intense.' },
+    { icon: '✨', iconBg: 'bg-purple-500/20', textColor: 'text-purple-400', gradient: 'from-purple-500 to-purple-900', desc: 'Sneaker kasual untuk aktivitas santai.' },
+    { icon: '💎', iconBg: 'bg-pink-500/20', textColor: 'text-pink-400', gradient: 'from-pink-500 to-pink-900', desc: 'Koleksi eksklusif edisi terbatas yang langka.' },
+  ];
+  return styles[index % styles.length];
+};
 </script>

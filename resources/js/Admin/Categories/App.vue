@@ -4,8 +4,8 @@
             <!-- Header section -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-white mb-2">Manage Categories</h2>
-                    <p class="text-gray-400 text-sm">Create, update, or delete product categories.</p>
+                    <h2 class="text-3xl font-bold text-white mb-2">Kelola Kategori Produk</h2>
+                    <p class="text-gray-400 text-sm">Tambah, Update, atau Hapus Kategori Produk</p>
                 </div>
                 <button @click="openCreateModal" class="px-5 py-2.5 bg-electric hover:bg-electric/80 text-white rounded-xl font-medium transition-all shadow-lg shadow-electric/20 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -26,10 +26,10 @@
                         <thead class="text-xs text-gray-400 uppercase bg-dark-800/50 border-b border-dark-600/50">
                             <tr>
                                 <th scope="col" class="px-6 py-4 font-medium">ID</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Name</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Nama Kategori</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Slug</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Created At</th>
-                                <th scope="col" class="px-6 py-4 font-medium text-right">Actions</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Dibuat Pada</th>
+                                <th scope="col" class="px-6 py-4 font-medium text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,7 +57,7 @@
                                 <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="w-12 h-12 mb-3 text-dark-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                                        <p>No categories found. Create your first category!</p>
+                                        <p>Belum ada kategori, buat kategori baru!</p>
                                     </div>
                                 </td>
                             </tr>
@@ -83,9 +83,9 @@
             <form id="categoryForm" @submit.prevent="submitForm">
                 <TextInput 
                     id="name"
-                    label="Category Name"
+                    label="Nama Kategori"
                     v-model="form.name"
-                    placeholder="e.g. Electronics, Clothing"
+                    placeholder="e.g. Sports, Fashion"
                     :error="form.errors.name"
                     required
                 />

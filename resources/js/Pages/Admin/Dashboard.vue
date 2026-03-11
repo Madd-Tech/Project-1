@@ -21,12 +21,11 @@
                         Session Active
                     </span>
                     <h2 class="text-3xl lg:text-4xl font-bold text-white mb-2">
-                        Welcome back,
+                        Selamat Datang,
                         <span class="gradient-text">{{ admin.name }}</span> 👋
                     </h2>
                     <p class="text-gray-400 text-sm">
-                        You're successfully logged in to the admin dashboard.
-                        Your session is secure and encrypted.
+                        Kamu berhasil Login ke Dashboard Admin!.
                     </p>
                 </div>
             </div>
@@ -99,10 +98,10 @@
                         <h3 class="font-semibold text-white">Quick Actions</h3>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div v-for="action in quickActions" :key="action.label" class="flex flex-col items-center gap-2 p-4 bg-dark-800/50 hover:bg-dark-700/70 border border-dark-600 hover:border-electric/30 rounded-xl transition-all duration-200 group text-center cursor-pointer">
+                        <Link v-for="action in quickActions" :key="action.label" :href="action.href" class="flex flex-col items-center gap-2 p-4 bg-dark-800/50 hover:bg-dark-700/70 border border-dark-600 hover:border-electric/30 rounded-xl transition-all duration-200 group text-center cursor-pointer">
                             <span class="text-2xl">{{ action.icon }}</span>
                             <span class="text-xs font-medium text-gray-300 group-hover:text-white transition-colors">{{ action.label }}</span>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -112,6 +111,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { Link } from "@inertiajs/vue3";
 import AdminLayout from "../../Admin/Components/AdminLayout.vue";
 
 const props = defineProps({
@@ -119,14 +119,18 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    stats: {
+        type: Object,
+        required: true,
+    }
 });
 
-const stats = [
-    { label: "Total Products", value: "—", icon: "📦", badge: "Manage", badgeCls: "text-electric bg-electric/10", iconBg: "bg-electric/10" },
-    { label: "Categories", value: "—", icon: "🗂️", badge: "View", badgeCls: "text-neon bg-neon/10", iconBg: "bg-neon/10" },
-    { label: "Stock Items", value: "—", icon: "🏷️", badge: "Track", badgeCls: "text-amber bg-amber/10", iconBg: "bg-amber/10" },
-    { label: "Orders Today", value: "—", icon: "🛒", badge: "Review", badgeCls: "text-purple-400 bg-purple-400/10", iconBg: "bg-purple-400/10" },
-];
+const stats = computed(() => [
+    { label: "Total Produk", value: props.stats.productCount, icon: "📦", badge: "Manage", badgeCls: "text-electric bg-electric/10", iconBg: "bg-electric/10" },
+    { label: "Kategori", value: props.stats.categoryCount, icon: "🗂️", badge: "View", badgeCls: "text-neon bg-neon/10", iconBg: "bg-neon/10" },
+    { label: "Stok Item", value: props.stats.totalStock, icon: "🏷️", badge: "Track", badgeCls: "text-amber bg-amber/10", iconBg: "bg-amber/10" },
+    { label: "Pesanan Hari Ini", value: props.stats.ordersToday, icon: "🛒", badge: "Review", badgeCls: "text-purple-400 bg-purple-400/10", iconBg: "bg-purple-400/10" },
+]);
 
 const sessionDetails = computed(() => [
     { label: "Logged in as", value: props.admin.name },
@@ -136,9 +140,9 @@ const sessionDetails = computed(() => [
 ]);
 
 const quickActions = [
-    { icon: "📦", label: "Products" },
-    { icon: "🗂️", label: "Categories" },
-    { icon: "🏷️", label: "Stock" },
-    { icon: "🛒", label: "Orders" },
+    { icon: "📦", label: "Produk", href: "/admin/products" },
+    { icon: "🗂️", label: "Kategori", href: "/admin/categories" },
+    { icon: "🏷️", label: "Stok", href: "/admin/stock" },
+    { icon: "🛒", label: "Pesanan", href: "/admin/dashboard" }, // Placeholder as orders route doesn't exist yet
 ];
 </script>
