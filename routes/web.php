@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\StockMovController;
+use App\Http\Controllers\OrderController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,23 @@ Route::get('/', function () {
         'categories' => $categories
     ]);
 });
+
+Route::get('/products', function () {
+    $products = Product::with('category')->where('status', 'active')->latest()->get();
+    $categories = Category::withCount('products')->get();
+    return Inertia::render('Products', [
+        'products' => $products,
+        'categories' => $categories
+    ]);
+});
+
+// Order routes
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout.index');
+Route::post('/checkout', [OrderController::class, 'storeCart'])->name('checkout.store');
+Route::get('/order/{product}', [OrderController::class, 'create'])->name('order.create');
+Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+Route::get('/order/status/{order}', [OrderController::class, 'status'])->name('order.status');
+Route::post('/midtrans/notification', [OrderController::class, 'notification'])->name('midtrans.notification');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
