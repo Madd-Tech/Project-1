@@ -201,7 +201,7 @@
                 <h3 class="text-lg font-semibold text-white font-[Outfit]">Metode Pembayaran</h3>
               </div>
 
-              <div class="grid grid-cols-2 gap-3 mb-6">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
                 <button type="button" @click="form.payment_method = 'bank_transfer'" :class="['p-4 rounded-2xl border-2 transition-all duration-300 text-left', form.payment_method === 'bank_transfer' ? 'border-electric bg-electric/5 shadow-lg shadow-electric/10' : 'border-white/5 hover:border-white/15 bg-dark-800']">
                   <div class="flex items-center gap-3">
                     <div :class="['w-10 h-10 rounded-xl flex items-center justify-center', form.payment_method === 'bank_transfer' ? 'bg-electric/20' : 'bg-white/5']">
@@ -221,6 +221,19 @@
                     <div>
                       <p :class="['font-semibold text-sm', form.payment_method === 'qris' ? 'text-white' : 'text-gray-400']">QRIS</p>
                       <p class="text-[11px] text-gray-500">Scan QR Code</p>
+                    </div>
+                  </div>
+                </button>
+                <button type="button" @click="form.payment_method = 'gopay'; form.payment_bank = null" :class="['p-4 rounded-2xl border-2 transition-all duration-300 text-left', form.payment_method === 'gopay' ? 'border-[#00AED6] bg-[#00AED6]/5 shadow-lg shadow-[#00AED6]/10' : 'border-white/5 hover:border-white/15 bg-dark-800']">
+                  <div class="flex items-center gap-3">
+                    <div :class="['w-10 h-10 rounded-xl flex items-center justify-center', form.payment_method === 'gopay' ? 'bg-[#00AED6]/20' : 'bg-white/5']">
+                      <svg class="w-5 h-5" :class="form.payment_method === 'gopay' ? 'text-[#00AED6]' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p :class="['font-semibold text-sm', form.payment_method === 'gopay' ? 'text-white' : 'text-gray-400']">GoPay</p>
+                      <p class="text-[11px] text-gray-500">GoPay App</p>
                     </div>
                   </div>
                 </button>

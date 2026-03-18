@@ -50,7 +50,7 @@
                                         {{ product.category?.name || 'Uncategorized' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 font-medium text-electric">${{ product.price }}</td>
+                                <td class="px-6 py-4 font-medium text-electric">Rp. {{ product.price }}</td>
                                 <td class="px-6 py-4">
                                     <span :class="['px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md border', product.status === 'active' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20']">
                                         {{ product.status }}
@@ -163,21 +163,21 @@
                         id="price"
                         type="number"
                         step="0.01"
-                        label="Price ($)"
+                        label="Harga (Rp)"
                         v-model="form.price"
-                        placeholder="0.00"
+                        placeholder="0"
                         :error="form.errors.price"
                         required
                     />
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Deskripsi</label>
                     <textarea 
                         v-model="form.description" 
                         rows="4" 
                         class="w-full bg-dark-900 border border-dark-600 rounded-xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-electric/50 focus:border-electric transition-all shadow-inner resize-none placeholder-gray-500"
-                        placeholder="Product detailed description..."
+                        placeholder="Deskripsi produk..."
                         required
                     ></textarea>
                      <p v-if="form.errors.description" class="text-red-400 text-xs mt-2">{{ form.errors.description }}</p>

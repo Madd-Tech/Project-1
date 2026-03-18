@@ -105,7 +105,7 @@ class OrderController extends Controller
             'customer_email' => 'required|email|max:255',
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
-            'payment_method' => 'required|in:bank_transfer,qris',
+            'payment_method' => 'required|in:bank_transfer,qris,gopay',
             'payment_bank' => 'nullable|required_if:payment_method,bank_transfer|in:bca,bni,bri,mandiri,permata',
             'items' => 'required|array|min:1',
             'items.*.id' => 'required|exists:products,id',
@@ -183,7 +183,10 @@ class OrderController extends Controller
 
         try {
             $response = Http::withBasicAuth(config('midtrans.server_key'), '')
-                ->withHeaders(['Content-Type' => 'application/json'])
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])
                 ->post(config('midtrans.api_url') . '/charge', $payload);
 
             $body = $response->json();
@@ -199,6 +202,15 @@ class OrderController extends Controller
                     $updateData['va_number'] = $vaNumber;
                 } elseif ($validated['payment_method'] === 'qris') {
                     $updateData['qr_url'] = $body['actions'][0]['url'] ?? null;
+                } elseif ($validated['payment_method'] === 'gopay') {
+                    if (isset($body['actions'])) {
+                        foreach ($body['actions'] as $action) {
+                            if ($action['name'] === 'generate-qr-code') {
+                                $updateData['qr_url'] = $action['url'];
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 if (isset($body['expiry_time'])) {
@@ -363,6 +375,8 @@ class OrderController extends Controller
             }
         } elseif ($validated['payment_method'] === 'qris') {
             $payload['payment_type'] = 'qris';
+        } elseif ($validated['payment_method'] === 'gopay') {
+            $payload['payment_type'] = 'gopay';
         }
 
         return $payload;

@@ -180,8 +180,8 @@
               </div>
             </div>
 
-            <!-- QRIS -->
-            <div v-else-if="order.payment_method === 'qris' && order.qr_url" class="space-y-4 text-center">
+            <!-- QRIS / GoPay -->
+            <div v-else-if="(order.payment_method === 'qris' || order.payment_method === 'gopay') && order.qr_url" class="space-y-4 text-center">
               <div class="bg-white rounded-2xl p-6 inline-block mx-auto">
                 <img :src="order.qr_url" alt="QR Code" class="w-48 h-48 mx-auto" />
               </div>

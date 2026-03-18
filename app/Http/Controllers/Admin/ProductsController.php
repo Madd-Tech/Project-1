@@ -68,6 +68,8 @@ class ProductsController extends Controller
             }
             $imagePath = $request->file('image')->store('products', 'public');
             $validated['image'] = $imagePath;
+        } else {
+            unset($validated['image']);
         }
 
         if ($product->name !== $validated['name']) {
