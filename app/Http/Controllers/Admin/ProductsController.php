@@ -12,14 +12,22 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->orderBy('created_at', 'desc')->paginate(10);
+        $query = Product::with('category')->orderBy('created_at', 'desc');
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('slug', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(5)->withQueryString();
         $categories = Category::orderBy('name', 'asc')->get();
 
         return Inertia::render('Admin/Product', [
             'products' => $products,
             'categories' => $categories,
+            'filters' => $request->only(['search']),
             'admin' => [
                 'name' => \Illuminate\Support\Facades\Auth::user()->name,
                 'email' => \Illuminate\Support\Facades\Auth::user()->email,

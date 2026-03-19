@@ -10,10 +10,18 @@ use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Category::orderBy('created_at', 'desc');
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('slug', 'like', '%' . $request->search . '%');
+        }
+
         return Inertia::render('Admin/Categories', [
-            'categories' => Category::orderBy('created_at', 'desc')->get(),
+            'categories' => $query->get(),
+            'filters' => $request->only(['search']),
             'admin' => [
                 'name' => \Illuminate\Support\Facades\Auth::user()->name,
                 'email' => \Illuminate\Support\Facades\Auth::user()->email,

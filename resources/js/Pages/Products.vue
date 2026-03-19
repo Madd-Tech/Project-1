@@ -19,7 +19,7 @@
           <button
             v-for="cat in filterCategories"
             :key="cat"
-            @click="activeFilter = cat"
+            @click="filterByCategory(cat)"
             :class="[
               'px-5 py-2.5 text-sm font-medium rounded-xl transition-all duration-300',
               activeFilter === cat
@@ -34,7 +34,7 @@
         <!-- Product Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div
-            v-for="(product, index) in filteredProducts"
+            v-for="(product, index) in products.data"
             :key="product.id"
             class="glass-card rounded-3xl overflow-hidden group"
           >
@@ -99,7 +99,15 @@
           </div>
         </div>
 
-        <div v-if="filteredProducts.length === 0" class="text-center py-12 text-gray-400">
+        <!-- Pagination -->
+        <div v-if="products.links && products.links.length > 3" class="mt-12 flex flex-wrap justify-center gap-2">
+            <template v-for="(link, pIndex) in products.links" :key="pIndex">
+                <div v-if="link.url === null" class="px-4 py-2 text-sm font-medium text-gray-500 bg-dark-800 border border-dark-600 rounded-xl cursor-not-allowed" v-html="link.label"></div>
+                <Link v-else :href="link.url" preserve-scroll preserve-state :class="['px-4 py-2 text-sm font-medium rounded-xl border transition-all duration-300', link.active ? 'bg-electric text-white border-electric shadow-lg shadow-electric/25' : 'bg-dark-800 text-gray-400 border-dark-600 hover:text-white hover:border-electric/50 hover:bg-dark-700']" v-html="link.label" />
+            </template>
+        </div>
+
+        <div v-if="products.data && products.data.length === 0" class="text-center py-12 text-gray-400">
           Produk tidak ditemukan untuk kategori ini.
         </div>
       </div>
@@ -111,6 +119,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { router, Link } from '@inertiajs/vue3';
 import NavBar from './Components/NavBar.vue';
 import FooterSection from './Components/FooterSection.vue';
 import { useCart } from '../Composables/useCart';
@@ -119,28 +128,30 @@ const { addToCart } = useCart();
 
 const props = defineProps({
   products: {
-    type: Array,
-    default: () => []
+    type: Object,
+    default: () => ({ data: [], links: [] })
   },
   categories: {
     type: Array,
     default: () => []
+  },
+  filters: {
+    type: Object,
+    default: () => ({ category: 'All' })
   }
 });
 
-const activeFilter = ref('All');
+const activeFilter = ref(props.filters.category || 'All');
 
 const filterCategories = computed(() => {
   const cats = props.categories.map(c => c.name);
   return ['All', ...cats];
 });
 
-const filteredProducts = computed(() => {
-  if (activeFilter.value === 'All') {
-    return props.products;
-  }
-  return props.products.filter(p => p.category && p.category.name === activeFilter.value);
-});
+const filterByCategory = (cat) => {
+  activeFilter.value = cat;
+  router.get('/products', { category: cat }, { preserveState: true, replace: true, preserveScroll: true });
+};
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat('id-ID').format(price);

@@ -7,6 +7,9 @@
                     <h2 class="text-3xl font-bold text-white mb-2">Manage Stock</h2>
                     <p class="text-gray-400 text-sm">Update inventory levels for your products.</p>
                 </div>
+                <div class="w-full sm:w-auto">
+                    <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Search products..." />
+                </div>
             </div>
 
             <!-- Flash Success Message -->
@@ -141,10 +144,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '../Components/AdminLayout.vue';
 import Modal from '../Components/Modal.vue';
 import TextInput from '../Components/TextInput.vue';
+import SearchInput from '../Components/SearchInput.vue';
 
 const props = defineProps({
     products: {
@@ -155,7 +159,16 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    filters: {
+        type: Object,
+        default: () => ({}),
+    },
 });
+
+const searchQuery = ref(props.filters?.search || '');
+const handleSearch = () => {
+    router.get('/admin/stock', { search: searchQuery.value }, { preserveState: true, replace: true });
+};
 
 const isModalOpen = ref(false);
 const selectedProduct = ref(null);

@@ -13,21 +13,45 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 use App\Models\Category;
 
-Route::get('/', function () {
-    $products = Product::with('category')->where('status', 'active')->latest()->take(8)->get();
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    $query = Product::with('category')->where('status', 'active')->latest();
+    
+    if ($request->has('search') && $request->search != '') {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+    
+    if ($request->has('category') && $request->category !== 'All') {
+        $query->whereHas('category', function($q) use ($request) {
+            $q->where('name', $request->category);
+        });
+    }
+
+    $products = $query->paginate(4)->withQueryString();
     $categories = Category::withCount('products')->take(6)->get();
+
     return Inertia::render('Home', [
         'products' => $products,
-        'categories' => $categories
+        'categories' => $categories,
+        'filters' => $request->only(['search', 'category'])
     ]);
 });
 
-Route::get('/products', function () {
-    $products = Product::with('category')->where('status', 'active')->latest()->get();
+Route::get('/products', function (\Illuminate\Http\Request $request) {
+    $query = Product::with('category')->where('status', 'active')->latest();
+    
+    if ($request->has('category') && $request->category !== 'All') {
+        $query->whereHas('category', function($q) use ($request) {
+            $q->where('name', $request->category);
+        });
+    }
+    
+    $products = $query->paginate(4)->withQueryString();
     $categories = Category::withCount('products')->get();
+    
     return Inertia::render('Products', [
         'products' => $products,
-        'categories' => $categories
+        'categories' => $categories,
+        'filters' => $request->only(['category'])
     ]);
 });
 

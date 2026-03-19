@@ -10,12 +10,20 @@ use Illuminate\Support\Facades\Auth;
 
 class StockController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->orderBy('created_at', 'desc')->paginate(10);
+        $query = Product::with('category')->orderBy('created_at', 'desc');
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('slug', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(10)->withQueryString();
 
         return Inertia::render('Admin/Stock', [
             'products' => $products,
+            'filters' => $request->only(['search']),
             'admin' => [
                 'name' => Auth::user()->name,
                 'email' => Auth::user()->email,

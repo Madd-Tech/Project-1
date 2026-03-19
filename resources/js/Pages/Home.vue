@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-dark-900">
-    <NavBar />
+    <NavBar :filters="filters" />
     <HeroSection />
     <BrandMarquee />
-    <ProductSection :products="products" :categories="categories" />
+    <ProductSection :products="products" :categories="categories" :filters="filters" />
     <CategorySection :categories="categories" />
     <!-- <PromoSection /> -->
     <FeatureSection />
@@ -26,7 +26,8 @@ import NewsletterSection from './Components/NewsletterSection.vue';
 import FooterSection from './Components/FooterSection.vue';
 
 defineProps({
-  products: Array,
-  categories: Array
+  products: Object,
+  categories: Array,
+  filters: Object
 });
 </script>

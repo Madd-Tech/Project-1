@@ -7,10 +7,13 @@
                     <h2 class="text-3xl font-bold text-white mb-2">Manage Products</h2>
                     <p class="text-gray-400 text-sm">Create, update, or delete products.</p>
                 </div>
-                <button @click="openCreateModal" class="px-5 py-2.5 bg-electric hover:bg-electric/80 text-white rounded-xl font-medium transition-all shadow-lg shadow-electric/20 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Add Product
-                </button>
+                <div class="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-3">
+                    <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Search products..." />
+                    <button @click="openCreateModal" class="px-5 py-2.5 bg-electric hover:bg-electric/80 text-white rounded-xl font-medium transition-all shadow-lg shadow-electric/20 flex items-center justify-center gap-2 whitespace-nowrap">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Add Product
+                    </button>
+                </div>
             </div>
 
             <!-- Flash Success Message -->
@@ -228,10 +231,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '../Components/AdminLayout.vue';
 import Modal from '../Components/Modal.vue';
 import TextInput from '../Components/TextInput.vue';
+import SearchInput from '../Components/SearchInput.vue';
 
 const props = defineProps({
     products: {
@@ -246,7 +250,16 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    filters: {
+        type: Object,
+        default: () => ({}),
+    },
 });
+
+const searchQuery = ref(props.filters?.search || '');
+const handleSearch = () => {
+    router.get('/admin/products', { search: searchQuery.value }, { preserveState: true, replace: true });
+};
 
 // Create / Edit Logic
 const isModalOpen = ref(false);

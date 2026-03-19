@@ -35,11 +35,19 @@
         <!-- Right Section -->
         <div class="hidden md:flex items-center gap-4" id="nav-actions">
           <!-- Search -->
-          <button class="p-2 text-gray-400 hover:text-white transition-colors duration-300" id="nav-search-btn">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
+          <form @submit.prevent="performSearch" class="relative flex items-center group">
+            <input 
+              v-model="searchQuery"
+              type="text" 
+              placeholder="Search products..." 
+              class="w-32 focus:w-48 bg-transparent focus:bg-white/5 border border-transparent focus:border-white/10 rounded-full py-1.5 pl-3 pr-8 text-sm text-white placeholder-gray-500 transition-all duration-300 outline-none"
+            >
+            <button type="submit" class="absolute right-2 p-1 text-gray-500 group-hover:text-white transition-colors" id="nav-search-btn">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </form>
 
           <!-- Cart -->
           <button
@@ -154,8 +162,23 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { router } from '@inertiajs/vue3';
 import { useCart } from '../../Composables/useCart';
 import CartDrawer from './CartDrawer.vue';
+
+const props = defineProps({
+  filters: {
+    type: Object,
+    default: () => ({ search: '' })
+  }
+});
+
+const searchQuery = ref(props.filters?.search || '');
+
+const performSearch = () => {
+  // Will submit search to the current URL so it works on both Home and Products page
+  router.get(window.location.pathname, { search: searchQuery.value }, { preserveState: true, replace: true, preserveScroll: true });
+};
 
 const { totalItems, toggleDrawer } = useCart();
 
