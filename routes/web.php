@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\StockMovController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductDetailController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ use App\Models\Product;
 use App\Models\Category;
 
 Route::get('/', function (\Illuminate\Http\Request $request) {
-    $query = Product::with('category')->where('status', 'active')->latest();
+    $query = Product::with('category')->withAvg('reviews', 'rating')->withCount('reviews')->where('status', 'active')->latest();
     
     if ($request->has('search') && $request->search != '') {
         $query->where('name', 'like', '%' . $request->search . '%');
@@ -30,15 +31,22 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
     $products = $query->paginate(4)->withQueryString();
     $categories = Category::withCount('products')->take(6)->get();
 
+    $testimonials = \App\Models\ProductReview::with('product')
+        ->where('rating', '>=', 4)
+        ->inRandomOrder()
+        ->limit(6)
+        ->get();
+
     return Inertia::render('Home', [
         'products' => $products,
         'categories' => $categories,
+        'testimonials' => $testimonials,
         'filters' => $request->only(['search', 'category'])
     ]);
 });
 
 Route::get('/products', function (\Illuminate\Http\Request $request) {
-    $query = Product::with('category')->where('status', 'active')->latest();
+    $query = Product::with('category')->withAvg('reviews', 'rating')->withCount('reviews')->where('status', 'active')->latest();
     
     if ($request->has('category') && $request->category !== 'All') {
         $query->whereHas('category', function($q) use ($request) {
@@ -55,6 +63,10 @@ Route::get('/products', function (\Illuminate\Http\Request $request) {
         'filters' => $request->only(['category'])
     ]);
 });
+
+// Product detail & reviews
+Route::get('/products/{slug}', [ProductDetailController::class, 'show'])->name('product.show');
+Route::post('/products/{slug}/review', [ProductDetailController::class, 'storeReview'])->name('product.review.store');
 
 // Order routes
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout.index');

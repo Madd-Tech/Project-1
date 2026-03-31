@@ -7,7 +7,7 @@
     <CategorySection :categories="categories" />
     <!-- <PromoSection /> -->
     <FeatureSection />
-    <!-- <TestimonialSection /> -->
+    <TestimonialSection :testimonials="testimonials" />
     <!-- <NewsletterSection /> -->
     <FooterSection />
   </div>
@@ -28,6 +28,7 @@ import FooterSection from './Components/FooterSection.vue';
 defineProps({
   products: Object,
   categories: Array,
+  testimonials: Array,
   filters: Object
 });
 </script>
