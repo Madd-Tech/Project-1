@@ -11,9 +11,7 @@ use App\Models\Category;
 
 class DashboardController extends Controller
 {
-    /**
-     * Render the admin dashboard.
-     */
+ 
     public function index()
     {
         return Inertia::render('Admin/Dashboard', [
@@ -25,7 +23,7 @@ class DashboardController extends Controller
                 'productCount' => Product::count(),
                 'categoryCount' => Category::count(),
                 'totalStock' => Product::sum('stock'),
-                'ordersToday' => 0, // Placeholder for now
+                'ordersToday' => 0, //the placeholder
             ]
         ]);
     }

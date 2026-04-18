@@ -69,8 +69,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Category Modal (Create/Edit) -->
         <Modal 
             :is-open="isModalOpen" 
             @close="closeModal" 

@@ -68,11 +68,9 @@ Route::get('/products', function (\Illuminate\Http\Request $request) {
 Route::get('/products/{slug}', [ProductDetailController::class, 'show'])->name('product.show');
 Route::post('/products/{slug}/review', [ProductDetailController::class, 'storeReview'])->name('product.review.store');
 
-// Order routes
+// Order routes (checkout is now a client-side WhatsApp redirect)
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout.index');
-Route::post('/checkout', [OrderController::class, 'storeCart'])->name('checkout.store');
 Route::get('/order/{product}', [OrderController::class, 'create'])->name('order.create');
-Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 Route::get('/order/status/{order}', [OrderController::class, 'status'])->name('order.status');
 Route::post('/midtrans/notification', [OrderController::class, 'notification'])->name('midtrans.notification');
 
@@ -86,7 +84,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoriesController::class)->except(['create', 'show', 'edit']);
-    Route::post('products/{product}', [ProductsController::class, 'update'])->name('products.update'); // Override put due to multipart/form-data
+    Route::post('products/{product}', [ProductsController::class, 'update'])->name('products.update'); 
     Route::resource('products', ProductsController::class)->except(['create', 'show', 'edit', 'update']);
     Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
     Route::put('/stock/{product}', [StockController::class, 'update'])->name('stock.update');

@@ -88,15 +88,15 @@ defineEmits(['close']);
 
 const navItems = [
     { label: 'Dashboard', href: '/admin/dashboard' },
-    { label: 'Categories', href: '/admin/categories' },
-    { label: 'Products', href: '/admin/products' },
-    { label: 'Stock', href: '/admin/stock' },
-    { label: 'StockMov', href: '/admin/stockmov' },
-    { label: 'Orders', href: '/admin/orders' },
+    { label: 'Kategori', href: '/admin/categories' },
+    { label: 'Produk', href: '/admin/products' },
+    { label: 'Stok', href: '/admin/stock' },
+    { label: 'Catat Stok', href: '/admin/stockmov' },
+    { label: 'Pesanan', href: '/admin/orders' },
 ];
 
 const isActive = (href) => {
-    // Exact match for dashboard to avoid matching other routes, but startswith for nested category routes
+    
     if (href === '/admin/dashboard') {
         return page.url === '/admin/dashboard';
     }

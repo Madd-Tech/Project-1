@@ -12,13 +12,11 @@
                 </div>
             </div>
 
-            <!-- Flash Success Message -->
             <div v-if="$page.props.flash?.success" class="px-4 py-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl flex items-center gap-3 animate-fade-in-up">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 <p class="text-sm font-medium">{{ $page.props.flash.success }}</p>
             </div>
 
-            <!-- Products Stock Table -->
             <div class="glass-card rounded-2xl overflow-hidden animate-fade-in-up">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-300">

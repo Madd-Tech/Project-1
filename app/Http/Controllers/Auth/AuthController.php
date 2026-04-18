@@ -9,9 +9,7 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    /**
-     * Show the login page.
-     */
+  
     public function showLogin()
     {
         if (Auth::check() && Auth::user()->isAdmin()) {
@@ -21,9 +19,6 @@ class AuthController extends Controller
         return Inertia::render('Auth/Login');
     }
 
-    /**
-     * Handle login attempt.
-     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -38,7 +33,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('admin.dashboard'));
             }
 
-            // Non-admin users redirect to home
+   
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -53,9 +48,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Handle logout.
-     */
     public function logout(Request $request)
     {
         Auth::logout();

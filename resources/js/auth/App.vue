@@ -1,9 +1,7 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 font-sans text-white">
-    <!-- Glassmorphism Card -->
     <div class="relative w-full max-w-md p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
       
-      <!-- Decorative Elements -->
       <div class="absolute -top-12 -left-12 w-32 h-32 bg-indigo-500/30 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-purple-500/30 rounded-full blur-3xl"></div>
 

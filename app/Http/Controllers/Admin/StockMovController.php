@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StockMovController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
         $movements = StockMove::with('product')->latest()->paginate(10);
@@ -28,15 +26,6 @@ class StockMovController extends Controller
             ],
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -59,35 +48,4 @@ class StockMovController extends Controller
         return redirect()->back()->with('success', 'Stock movement recorded successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

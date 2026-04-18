@@ -3,7 +3,6 @@
         <label v-if="label" :for="id" class="block text-sm font-medium text-gray-300 mb-2">{{ label }}</label>
         
         <div class="relative group">
-            <!-- Optional icon slot -->
             <div v-if="$slots.icon" class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-electric transition-colors">
                 <slot name="icon"></slot>
             </div>

@@ -17,8 +17,6 @@ class ProductDetailController extends Controller
 
         $averageRating = round($product->reviews()->avg('rating') ?? 0, 1);
         $totalReviews  = $product->reviews()->count();
-
-        // Rating distribution (5→1)
         $ratingDistribution = [];
         for ($i = 5; $i >= 1; $i--) {
             $count = $product->reviews()->where('rating', $i)->count();

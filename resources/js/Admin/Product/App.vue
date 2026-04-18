@@ -312,10 +312,9 @@ const openEditModal = (product) => {
     form.status = product.status;
     form.price = product.price;
     form.description = product.description;
-    form.image = null; // Don't require image on edit unless changing
+    form.image = null; 
     form.clearErrors();
     
-    // Show existing image
     if (product.image) {
         imagePreview.value = `/storage/${product.image}`;
     } else {
@@ -333,7 +332,6 @@ const closeModal = () => {
 
 const submitForm = () => {
     if (isEditing.value) {
-        // Inertia specific standard for sending files with PUT requests
         form.post(`/admin/products/${currentProductId.value}`, {
             onSuccess: () => closeModal(),
         });

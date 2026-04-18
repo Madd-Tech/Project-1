@@ -9,10 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     * Only allow authenticated users with the 'admin' role.
-     */
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check() || !Auth::user()->isAdmin()) {
