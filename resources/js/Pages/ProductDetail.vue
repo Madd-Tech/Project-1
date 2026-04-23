@@ -97,17 +97,7 @@
                 </svg>
                 {{ product.stock === 0 ? 'Habis Terjual' : 'Tambah ke Keranjang' }}
               </button>
-              <Link
-                :href="`/order/${product.slug}`"
-                :class="[
-                  'flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-2xl font-semibold transition-all duration-300',
-                  product.stock === 0
-                    ? 'glass text-gray-500 cursor-not-allowed pointer-events-none'
-                    : 'glass text-white hover:bg-white/10 border border-white/10 hover:border-electric/50'
-                ]"
-              >
-                Beli Sekarang
-              </Link>
+             
             </div>
           </div>
         </div>

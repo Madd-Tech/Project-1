@@ -34,8 +34,7 @@ export function useCart() {
     state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   );
 
-  const tax = computed(() => subtotal.value * 0.11);
-  const totalAmount = computed(() => subtotal.value + tax.value);
+  const totalAmount = computed(() => subtotal.value);
 
   function addToCart(product) {
     const existing = state.items.find(item => item.id === product.id);
@@ -121,8 +120,6 @@ export function useCart() {
   return {
     items: computed(() => state.items),
     totalItems,
-    subtotal,
-    tax,
     totalAmount,
     isOpen: computed(() => state.isOpen),
     toast: computed(() => state.toast),

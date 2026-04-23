@@ -33,8 +33,8 @@
         <div v-for="section in footerSections" :key="section.title">
           <h4 class="text-white font-semibold font-[Outfit] mb-4">{{ section.title }}</h4>
           <ul class="space-y-3">
-            <li v-for="link in section.links" :key="link">
-              <a href="#" class="text-gray-400 text-sm hover:text-neon transition-colors duration-300">{{ link }}</a>
+            <li v-for="link in section.links" :key="link.text">
+              <a :href="link.href" class="text-gray-400 text-sm hover:text-neon transition-colors duration-300">{{ link.text }}</a>
             </li>
           </ul>
         </div>
@@ -53,6 +53,8 @@
 </template>
 
 <script setup>
+const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '6285695429616';
+
 const socials = [
   { name: 'Instagram', icon: 'IG', url: '#' },
   { name: 'Twitter', icon: 'X', url: '#' },
@@ -63,15 +65,29 @@ const socials = [
 const footerSections = [
   {
     title: 'Produk',
-    links: ['Running Shoes', 'Lifestyle', 'Basketball', 'Training', 'Limited Edition', 'Sale'],
+    links: [
+      { text: 'Running Shoes', href: '/products' },
+      { text: 'Lifestyle', href: '/products' },
+      { text: 'Basketball', href: '/products' },
+      { text: 'Training', href: '/products' },
+      { text: 'Limited Edition', href: '/products' },
+    ],
   },
   {
     title: 'Layanan',
-    links: ['Lacak Pesanan', 'Pengembalian', 'Ukuran Sepatu', 'FAQ', 'Hubungi Kami'],
+    links: [
+      { text: 'Ukuran Sepatu', href: '/faq' },
+      { text: 'FAQ', href: '/faq' },
+      { text: 'Hubungi Kami', href: `https://wa.me/${waNumber}` },
+    ],
   },
   {
     title: 'Perusahaan',
-    links: ['Tentang Kami', 'Karir', 'Blog', 'Press Kit', 'Affiliate'],
+    links: [
+      { text: 'Tentang Kami', href: '/#about' },
+      { text: 'Karir', href: '#' },
+      { text: 'Blog', href: '#' },
+    ],
   },
 ];
 </script>

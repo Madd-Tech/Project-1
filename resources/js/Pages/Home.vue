@@ -5,10 +5,9 @@
     <BrandMarquee />
     <ProductSection :products="products" :categories="categories" :filters="filters" />
     <CategorySection :categories="categories" />
-    <!-- <PromoSection /> -->
-    <FeatureSection />
     <TestimonialSection :testimonials="testimonials" />
-    <!-- <NewsletterSection /> -->
+    <AboutSection />
+    <FaqSection />
     <FooterSection />
   </div>
 </template>
@@ -19,10 +18,9 @@ import HeroSection from './Components/HeroSection.vue';
 import BrandMarquee from './Components/BrandMarquee.vue';
 import ProductSection from './Components/ProductSection.vue';
 import CategorySection from './Components/CategorySection.vue';
-import PromoSection from './Components/PromoSection.vue';
-import FeatureSection from './Components/FeatureSection.vue';
 import TestimonialSection from './Components/TestimonialSection.vue';
-import NewsletterSection from './Components/NewsletterSection.vue';
+import AboutSection from './Components/AboutSection.vue';
+import FaqSection from './Components/FaqSection.vue';
 import FooterSection from './Components/FooterSection.vue';
 
 defineProps({

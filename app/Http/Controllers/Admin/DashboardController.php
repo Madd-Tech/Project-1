@@ -23,7 +23,6 @@ class DashboardController extends Controller
                 'productCount' => Product::count(),
                 'categoryCount' => Category::count(),
                 'totalStock' => Product::sum('stock'),
-                'ordersToday' => 0, //the placeholder
             ]
         ]);
     }

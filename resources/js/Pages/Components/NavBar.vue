@@ -191,6 +191,7 @@ const navItems = [
   { label: 'Categories', href: '/#categories' },
   // { label: 'Promo', href: '/#promo' },
   { label: 'About', href: '/#about' },
+  { label: 'FAQ', href: '/faq' },
 ];
 
 const handleScroll = () => {

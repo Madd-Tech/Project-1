@@ -129,31 +129,21 @@
       <div v-if="items.length > 0" class="border-t border-white/5 p-6 space-y-4">
         <!-- Totals -->
         <div class="space-y-2">
-          <div class="flex justify-between text-sm">
-            <span class="text-gray-500">Subtotal ({{ totalItems }} item)</span>
-            <span class="text-gray-300">Rp {{ formatPrice(subtotal) }}</span>
-          </div>
-          <div class="flex justify-between text-sm">
-            <span class="text-gray-500">PPN (11%)</span>
-            <span class="text-gray-300">Rp {{ formatPrice(tax) }}</span>
-          </div>
+         
           <div class="flex justify-between text-sm font-bold pt-2 border-t border-white/5">
             <span class="text-white">Total</span>
             <span class="text-white">Rp {{ formatPrice(totalAmount) }}</span>
           </div>
         </div>
 
-        <!-- Checkout Button -->
-        <a
-          href="/checkout"
-          @click="closeDrawer"
+        <!-- WhatsApp Checkout Button -->
+        <button
+          @click="checkoutViaWhatsApp"
           class="w-full py-3.5 bg-gradient-to-r from-electric to-neon rounded-2xl text-white font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-electric/25 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
-          Checkout
-        </a>
+          <i class="fa-brands fa-whatsapp w-5 h-5"></i>
+          Checkout via WhatsApp
+        </button>
 
         <!-- Clear Cart -->
         <button
@@ -193,13 +183,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { useCart } from '../../Composables/useCart';
 
 const {
   items,
   totalItems,
-  subtotal,
-  tax,
   totalAmount,
   isOpen,
   toast,
@@ -210,7 +199,29 @@ const {
   closeDrawer,
 } = useCart();
 
+const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '6285695429616';
+
 const formatPrice = (price) => {
   return new Intl.NumberFormat('id-ID').format(Math.round(price));
+};
+
+const whatsappMessage = computed(() => {
+  if (items.value.length === 0) return '';
+
+  const itemList = items.value
+    .map(item => `- ${item.name} (x${item.quantity})`)
+    .join('\n');
+
+  return `Halo Mas, saya mau pesan produk berikut:\n\n${itemList}\nApakah masih tersedia?`;
+});
+
+const checkoutViaWhatsApp = () => {
+  if (items.value.length === 0) return;
+
+  const encodedMessage = encodeURIComponent(whatsappMessage.value);
+  const waUrl = `https://wa.me/${waNumber}?text=${encodedMessage}`;
+
+  closeDrawer();
+  window.open(waUrl, '_blank');
 };
 </script>

@@ -6,8 +6,7 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\StockMovController;
-use App\Http\Controllers\Admin\OrdersController;
-use App\Http\Controllers\OrderController;
+
 use App\Http\Controllers\ProductDetailController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -68,11 +67,12 @@ Route::get('/products', function (\Illuminate\Http\Request $request) {
 Route::get('/products/{slug}', [ProductDetailController::class, 'show'])->name('product.show');
 Route::post('/products/{slug}/review', [ProductDetailController::class, 'storeReview'])->name('product.review.store');
 
-// Order routes (checkout is now a client-side WhatsApp redirect)
-Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout.index');
-Route::get('/order/{product}', [OrderController::class, 'create'])->name('order.create');
-Route::get('/order/status/{order}', [OrderController::class, 'status'])->name('order.status');
-Route::post('/midtrans/notification', [OrderController::class, 'notification'])->name('midtrans.notification');
+// FAQ page
+Route::get('/faq', function () {
+    return Inertia::render('Faq');
+})->name('faq');
+
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -90,6 +90,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/stock/{product}', [StockController::class, 'update'])->name('stock.update');
     Route::get('/stockmov', [StockMovController::class, 'index'])->name('stockmov.index');
     Route::post('/stockmov', [StockMovController::class, 'store'])->name('stockmov.store');
-    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
-    Route::patch('/orders/{order}/status', [OrdersController::class, 'updateStatus'])->name('orders.updateStatus');
+
 });

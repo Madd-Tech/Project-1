@@ -32,7 +32,7 @@
 
             <!-- Stats Grid -->
             <div
-                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
             >
                 <div
                     v-for="stat in stats"
@@ -129,7 +129,6 @@ const stats = computed(() => [
     { label: "Total Produk", value: props.stats.productCount, icon: "📦", badge: "Manage", badgeCls: "text-electric bg-electric/10", iconBg: "bg-electric/10" },
     { label: "Kategori", value: props.stats.categoryCount, icon: "🗂️", badge: "View", badgeCls: "text-neon bg-neon/10", iconBg: "bg-neon/10" },
     { label: "Stok Item", value: props.stats.totalStock, icon: "🏷️", badge: "Track", badgeCls: "text-amber bg-amber/10", iconBg: "bg-amber/10" },
-    { label: "Pesanan Hari Ini", value: props.stats.ordersToday, icon: "🛒", badge: "Review", badgeCls: "text-purple-400 bg-purple-400/10", iconBg: "bg-purple-400/10" },
 ]);
 
 const sessionDetails = computed(() => [
@@ -143,6 +142,5 @@ const quickActions = [
     { icon: "📦", label: "Produk", href: "/admin/products" },
     { icon: "🗂️", label: "Kategori", href: "/admin/categories" },
     { icon: "🏷️", label: "Stok", href: "/admin/stock" },
-    { icon: "🛒", label: "Pesanan", href: "/admin/dashboard" }, // Placeholder as orders route doesn't exist yet
 ];
 </script>

@@ -187,7 +187,6 @@
               <div class="text-center mb-6 py-5 bg-gradient-to-br from-electric/5 to-neon/5 rounded-2xl border border-white/5">
                 <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Total Pembayaran</p>
                 <p class="text-3xl font-bold text-white font-[Outfit]">Rp {{ formatPrice(totalAmount) }}</p>
-                <p class="text-xs text-gray-500 mt-1">(termasuk PPN 11%)</p>
               </div>
 
               <!-- Items summary -->
@@ -199,15 +198,7 @@
               </div>
 
               <div class="space-y-3 mb-6 border-t border-white/5 pt-4">
-                <div class="flex justify-between text-sm">
-                  <span class="text-gray-500">Subtotal</span>
-                  <span class="text-gray-300">Rp {{ formatPrice(subtotal) }}</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                  <span class="text-gray-500">PPN (11%)</span>
-                  <span class="text-gray-300">Rp {{ formatPrice(tax) }}</span>
-                </div>
-                <div class="border-t border-white/5 pt-3 flex justify-between text-sm font-semibold">
+                <div class="flex justify-between text-sm font-semibold">
                   <span class="text-gray-300">Total</span>
                   <span class="text-white">Rp {{ formatPrice(totalAmount) }}</span>
                 </div>
@@ -251,8 +242,6 @@ import { useCart } from '../Composables/useCart';
 
 const {
   items: cartItems,
-  subtotal,
-  tax,
   totalAmount,
   incrementQuantity,
   decrementQuantity,
