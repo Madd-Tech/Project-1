@@ -10,7 +10,7 @@
             </svg>
           </div>
           <span class="text-xl font-bold font-[Outfit] tracking-tight">
-            <span class="text-white">Babuihan</span><span class="text-electric">Store</span>
+            <span class="text-white">Bubuihan</span><span class="text-electric">Store</span>
           </span>
         </a>
         <div class="flex items-center gap-2 text-[#25D366] text-sm">
@@ -66,12 +66,12 @@
                     </svg>
                   </div>
                   <div>
-                    <h2 class="text-xl font-bold text-white font-[Outfit]">BabuihanStore</h2>
+                    <h2 class="text-xl font-bold text-white font-[Outfit]">BubuihanStore</h2>
                     <p class="text-gray-500 text-sm">Premium Footwear Store</p>
                   </div>
                 </div>
                 <div class="text-sm text-gray-400 space-y-0.5 mt-4">
-                  <p>Jl. Raya Babuihan No. 88</p>
+                  <p>Jl. Raya Bubuihan No. 88</p>
                   <p>Malang, Jawa Timur 65115</p>
                   <p>Indonesia</p>
                 </div>

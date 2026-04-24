@@ -5,13 +5,9 @@
         <!-- Brand -->
         <div class="lg:col-span-1">
           <div class="flex items-center gap-3 mb-5">
-            <div class="w-10 h-10 bg-gradient-to-br from-electric to-neon rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
+           <img :src="'/assets/logo.png'" alt="logo" class="w-20 h-20 object-contain">
             <span class="text-xl font-bold font-[Outfit]">
-              <span class="text-white">Babuihan</span><span class="text-electric">Store</span>
+              <span class="text-white">Bubuihan</span><span class="text-electric">Store</span>
             </span>
           </div>
           <p class="text-gray-400 text-sm leading-relaxed mb-6">
@@ -42,11 +38,8 @@
 
       <!-- Bottom Bar -->
       <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-gray-500 text-sm">© 2026 BabuihanStore. All rights reserved.</p>
-        <div class="flex items-center gap-6">
-          <a href="#" class="text-gray-500 text-sm hover:text-gray-300 transition-colors">Privacy Policy</a>
-          <a href="#" class="text-gray-500 text-sm hover:text-gray-300 transition-colors">Terms of Service</a>
-        </div>
+        <p class="text-gray-500 text-sm">© 2026 BubuihanStore. All rights reserved.</p>
+      
       </div>
     </div>
   </footer>
@@ -54,13 +47,6 @@
 
 <script setup>
 const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '6285695429616';
-
-const socials = [
-  { name: 'Instagram', icon: 'IG', url: '#' },
-  { name: 'Twitter', icon: 'X', url: '#' },
-  { name: 'Facebook', icon: 'FB', url: '#' },
-  { name: 'TikTok', icon: 'TT', url: '#' },
-];
 
 const footerSections = [
   {

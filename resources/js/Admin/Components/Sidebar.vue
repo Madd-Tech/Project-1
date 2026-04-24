@@ -13,12 +13,10 @@
         <div class="h-20 shrink-0 flex items-center px-6 border-b border-dark-600/50">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-dark-700/80 rounded-xl flex items-center justify-center glow-border border border-electric/30">
-                    <svg class="w-5 h-5 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                   <img :src="'/assets/logo.png'" alt="logo" class="w-10 h-10 object-contain">
                 </div>
                 <div>
-                    <h1 class="text-sm font-bold gradient-text pb-0.5">BabuihanStore</h1>
+                    <h1 class="text-sm font-bold gradient-text pb-0.5">BubuihanStore</h1>
                     <p class="text-[10px] text-gray-500 uppercase tracking-widest">Admin Panel</p>
                 </div>
             </div>

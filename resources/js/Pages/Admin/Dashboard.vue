@@ -43,7 +43,7 @@
                         <div
                             :class="`w-11 h-11 rounded-xl flex items-center justify-center ${stat.iconBg}`"
                         >
-                            <span class="text-xl">{{ stat.icon }}</span>
+                            <component :is="stat.icon" class="w-6 h-6 text-white" />
                         </div>
                         <span
                             :class="`text-xs font-semibold px-2 py-0.5 rounded-full ${stat.badgeCls}`"
@@ -99,7 +99,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <Link v-for="action in quickActions" :key="action.label" :href="action.href" class="flex flex-col items-center gap-2 p-4 bg-dark-800/50 hover:bg-dark-700/70 border border-dark-600 hover:border-electric/30 rounded-xl transition-all duration-200 group text-center cursor-pointer">
-                            <span class="text-2xl">{{ action.icon }}</span>
+                            <component :is="action.icon" class="w-7 h-7 text-gray-300 group-hover:text-white transition-colors" />
                             <span class="text-xs font-medium text-gray-300 group-hover:text-white transition-colors">{{ action.label }}</span>
                         </Link>
                     </div>
@@ -112,6 +112,7 @@
 <script setup>
 import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
+import { Package, FolderTree, Tag } from "lucide-vue-next";
 import AdminLayout from "../../Admin/Components/AdminLayout.vue";
 
 const props = defineProps({
@@ -126,9 +127,9 @@ const props = defineProps({
 });
 
 const stats = computed(() => [
-    { label: "Total Produk", value: props.stats.productCount, icon: "📦", badge: "Manage", badgeCls: "text-electric bg-electric/10", iconBg: "bg-electric/10" },
-    { label: "Kategori", value: props.stats.categoryCount, icon: "🗂️", badge: "View", badgeCls: "text-neon bg-neon/10", iconBg: "bg-neon/10" },
-    { label: "Stok Item", value: props.stats.totalStock, icon: "🏷️", badge: "Track", badgeCls: "text-amber bg-amber/10", iconBg: "bg-amber/10" },
+    { label: "Total Produk", value: props.stats.productCount, icon: Package, badge: "Manage", badgeCls: "text-electric bg-electric/10", iconBg: "bg-electric/10" },
+    { label: "Kategori", value: props.stats.categoryCount, icon: FolderTree, badge: "View", badgeCls: "text-neon bg-neon/10", iconBg: "bg-neon/10" },
+    { label: "Stok Item", value: props.stats.totalStock, icon: Tag, badge: "Track", badgeCls: "text-amber bg-amber/10", iconBg: "bg-amber/10" },
 ]);
 
 const sessionDetails = computed(() => [
@@ -139,8 +140,8 @@ const sessionDetails = computed(() => [
 ]);
 
 const quickActions = [
-    { icon: "📦", label: "Produk", href: "/admin/products" },
-    { icon: "🗂️", label: "Kategori", href: "/admin/categories" },
-    { icon: "🏷️", label: "Stok", href: "/admin/stock" },
+    { icon: Package, label: "Produk", href: "/admin/products" },
+    { icon: FolderTree, label: "Kategori", href: "/admin/categories" },
+    { icon: Tag, label: "Stok", href: "/admin/stock" },
 ];
 </script>

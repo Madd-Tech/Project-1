@@ -16,7 +16,7 @@
           Help Center
         </span>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-[Outfit] font-black text-white mb-6 animate-fade-in-up" style="animation-delay: 0.1s;">
-          Frequently Asked <span class="gradient-text">Questions</span>
+          Pertanyaan yang sering <span class="gradient-text">diajukan</span>
         </h1>
         <p class="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
           Temukan jawaban dari pertanyaan yang paling sering ditanyakan pelanggan kami.
@@ -36,13 +36,13 @@
             :key="cat.id"
             @click="activeCategory = cat.id"
             :class="[
-              'px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300',
+              'px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-2',
               activeCategory === cat.id
                 ? 'bg-gradient-to-r from-electric to-neon text-white shadow-lg shadow-electric/25'
                 : 'glass text-gray-400 hover:text-white hover:bg-white/5'
             ]"
           >
-            <span class="mr-1.5">{{ cat.icon }}</span>
+            <component :is="cat.icon" class="w-4 h-4" />
             {{ cat.label }}
           </button>
         </div>
@@ -65,7 +65,7 @@
                   'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
                   openIndex === index ? 'bg-electric/20 text-electric' : 'bg-dark-700 text-gray-500 group-hover:text-white group-hover:bg-dark-600'
                 ]">
-                  <span class="text-lg">{{ faq.icon }}</span>
+                  <component :is="faq.icon" class="w-5 h-5" />
                 </div>
                 <h3 :class="[
                   'font-semibold text-sm sm:text-base font-[Outfit] transition-colors duration-300',
@@ -105,7 +105,7 @@
         <!-- Empty State -->
         <div v-if="filteredFaqs.length === 0" class="text-center py-16">
           <div class="w-20 h-20 mx-auto bg-dark-700 rounded-3xl flex items-center justify-center mb-4">
-            <span class="text-3xl">🔍</span>
+            <Search class="w-8 h-8 text-gray-400" />
           </div>
           <p class="text-gray-400">Tidak ada pertanyaan di kategori ini.</p>
         </div>
@@ -127,7 +127,7 @@
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                :href="`https://wa.me/${waNumber}?text=${encodeURIComponent('Hallo, saya punya pertanyaan mengenai produk di BabuihanStore')}`"
+                :href="`https://wa.me/${waNumber}?text=${encodeURIComponent('Hallo, saya punya pertanyaan mengenai produk di BubuihanStore')}`"
                 target="_blank"
                 class="inline-flex items-center gap-2 px-8 py-4 bg-[#25D366] hover:bg-[#20BA5A] text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-[#25D366]/25 transition-all duration-300 transform hover:scale-105"
                 id="faq-wa-btn"
@@ -159,6 +159,11 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { 
+  List, ShoppingCart, Footprints, Truck, CreditCard, RefreshCw, 
+  Smartphone, FileText, CheckCircle, Ruler, Search, Package, MapPin, 
+  Lock, CircleDollarSign, ArrowLeftRight 
+} from 'lucide-vue-next';
 import NavBar from './Components/NavBar.vue';
 import FooterSection from './Components/FooterSection.vue';
 
@@ -172,96 +177,96 @@ const toggle = (index) => {
 };
 
 const categories = [
-  { id: 'all', label: 'Semua', icon: '📋' },
-  { id: 'order', label: 'Pemesanan', icon: '🛒' },
-  { id: 'product', label: 'Produk', icon: '👟' },
-  { id: 'shipping', label: 'Pengiriman', icon: '🚚' },
-  { id: 'payment', label: 'Pembayaran', icon: '💳' },
-  { id: 'return', label: 'Pengembalian', icon: '🔄' },
+  { id: 'all', label: 'Semua', icon: List },
+  { id: 'order', label: 'Pemesanan', icon: ShoppingCart },
+  { id: 'product', label: 'Produk', icon: Footprints },
+  { id: 'shipping', label: 'Pengiriman', icon: Truck },
+  { id: 'payment', label: 'Pembayaran', icon: CreditCard },
+  { id: 'return', label: 'Pengembalian', icon: RefreshCw },
 ];
 
 const faqs = [
   {
     category: 'order',
-    icon: '🛒',
-    question: 'Bagaimana cara memesan produk di BabuihanStore?',
+    icon: ShoppingCart,
+    question: 'Bagaimana cara memesan produk di BubuihanStore?',
     answer: 'Anda cukup memilih produk yang diinginkan, tentukan jumlahnya, lalu klik tombol "Pesan via WhatsApp". Pesanan Anda akan otomatis terkirim ke WhatsApp kami beserta detail produk dan jumlah yang dipilih. Tim kami akan segera memproses pesanan Anda.',
   },
   {
     category: 'order',
-    icon: '📱',
+    icon: Smartphone,
     question: 'Apakah saya perlu membuat akun untuk berbelanja?',
     answer: 'Tidak perlu! Anda bisa langsung berbelanja tanpa perlu mendaftar atau membuat akun. Cukup pilih produk dan pesan langsung via WhatsApp. Mudah dan cepat!',
   },
   {
     category: 'order',
-    icon: '📝',
+    icon: FileText,
     question: 'Bisakah saya memesan lebih dari satu produk sekaligus?',
     answer: 'Tentu! Anda bisa menambahkan beberapa produk ke keranjang belanja, lalu melakukan checkout sekaligus. Semua produk dalam keranjang akan otomatis masuk ke dalam pesan WhatsApp Anda.',
   },
   {
     category: 'product',
-    icon: '✅',
-    question: 'Apakah semua produk di BabuihanStore dijamin original?',
+    icon: CheckCircle,
+    question: 'Apakah semua produk di BubuihanStore dijamin original?',
     answer: 'Ya, 100% original. Semua produk yang kami jual adalah produk asli dari brand resmi. Kami bekerja sama langsung dengan distributor resmi untuk memastikan keaslian setiap produk. Garansi keaslian berlaku untuk semua produk.',
   },
   {
     category: 'product',
-    icon: '📏',
+    icon: Ruler,
     question: 'Bagaimana cara menentukan ukuran sepatu yang tepat?',
     answer: 'Setiap halaman produk dilengkapi dengan panduan ukuran. Anda juga bisa menghubungi tim kami via WhatsApp untuk konsultasi ukuran secara personal. Kami akan membantu Anda menemukan ukuran yang paling pas.',
   },
   {
     category: 'product',
-    icon: '🔎',
+    icon: Search,
     question: 'Apakah saya bisa melihat review dari pembeli lain?',
     answer: 'Ya! Setiap produk memiliki halaman detail yang menampilkan ulasan dan rating dari pembeli sebelumnya. Anda bisa mengecek pengalaman pelanggan lain sebelum memutuskan untuk membeli.',
   },
   {
     category: 'shipping',
-    icon: '🚚',
+    icon: Truck,
     question: 'Berapa lama estimasi pengiriman?',
     answer: 'Untuk area Jawa biasanya 2-3 hari kerja, luar Jawa 3-5 hari kerja, dan untuk daerah terpencil bisa memakan waktu 5-7 hari kerja. Kami menggunakan jasa ekspedisi terpercaya untuk memastikan paket sampai dengan aman.',
   },
   {
     category: 'shipping',
-    icon: '📦',
+    icon: Package,
     question: 'Apakah ada gratis ongkir?',
     answer: 'Ya! Kami memberikan gratis ongkir ke seluruh Indonesia tanpa minimum pembelian. Promo ini berlaku untuk semua produk yang tersedia di toko kami.',
   },
   {
     category: 'shipping',
-    icon: '📍',
+    icon: MapPin,
     question: 'Bisa kirim ke luar kota / luar pulau?',
     answer: 'Tentu bisa! Kami melayani pengiriman ke seluruh wilayah Indonesia, termasuk daerah-daerah terpencil. Biaya dan estimasi waktu pengiriman akan diinformasikan sebelum Anda melakukan pembayaran.',
   },
   {
     category: 'payment',
-    icon: '💳',
+    icon: CreditCard,
     question: 'Metode pembayaran apa saja yang tersedia?',
     answer: 'Saat ini kami menerima pembayaran melalui transfer bank (BCA, BNI, Mandiri, BRI), e-wallet (GoPay, OVO, Dana, ShopeePay), dan COD (Cash on Delivery) untuk area tertentu. Detail pembayaran akan diinformasikan saat Anda menghubungi kami via WhatsApp.',
   },
   {
     category: 'payment',
-    icon: '🔒',
-    question: 'Apakah pembayaran di BabuihanStore aman?',
+    icon: Lock,
+    question: 'Apakah pembayaran di BubuihanStore aman?',
     answer: 'Ya, sangat aman. Semua transaksi dilakukan langsung melalui WhatsApp dan transfer bank resmi. Kami tidak menyimpan data finansial apapun dari pelanggan. Konfirmasi pembayaran juga dilakukan secara real-time.',
   },
   {
     category: 'return',
-    icon: '🔄',
+    icon: RefreshCw,
     question: 'Bagaimana kebijakan pengembalian barang?',
     answer: 'Kami menyediakan kebijakan pengembalian dalam 30 hari sejak barang diterima. Barang harus dalam kondisi belum digunakan, lengkap dengan tag dan packaging asli. Hubungi kami via WhatsApp untuk memulai proses pengembalian.',
   },
   {
     category: 'return',
-    icon: '💰',
+    icon: CircleDollarSign,
     question: 'Apakah saya bisa mendapat refund?',
     answer: 'Ya! Jika produk yang Anda terima cacat, salah ukuran, atau tidak sesuai deskripsi, kami akan memberikan opsi pengembalian dana penuh atau tukar produk. Proses refund biasanya memakan waktu 3-5 hari kerja setelah barang kami terima kembali.',
   },
   {
     category: 'return',
-    icon: '🔀',
+    icon: ArrowLeftRight,
     question: 'Bisakah saya menukar dengan ukuran lain?',
     answer: 'Tentu bisa! Jika ukuran tidak pas, Anda bisa menukar dengan ukuran lain (selama stok tersedia) tanpa biaya tambahan. Ongkos kirim pengembalian ditanggung oleh kami.',
   },
