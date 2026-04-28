@@ -31,7 +31,7 @@
 
           <div class="flex flex-col sm:flex-row gap-4 mb-12">
             <a
-              href="#products"
+              href="/products"
               class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-electric to-neon text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-electric/25 transition-all duration-300 transform hover:scale-105 animate-pulse-glow"
               id="hero-shop-btn"
             >
@@ -40,16 +40,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
-            <!-- <a
-              href="#about"
-              class="inline-flex items-center justify-center gap-2 px-8 py-4 glass text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300"
-              id="hero-about-btn"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              </svg>
-              Watch Story
-            </a> -->
           </div>
 
           <!-- Stats -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\ProductReview;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,11 +27,14 @@ class ProductDetailController extends Controller
             ];
         }
 
+        $categories = Category::orderBy('id')->limit(5)->get(['id', 'name']);
+
         return Inertia::render('ProductDetail', [
             'product'            => $product,
             'averageRating'      => $averageRating,
             'totalReviews'       => $totalReviews,
             'ratingDistribution' => $ratingDistribution,
+            'categories'         => $categories,
         ]);
     }
 

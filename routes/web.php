@@ -69,7 +69,10 @@ Route::post('/products/{slug}/review', [ProductDetailController::class, 'storeRe
 
 // FAQ page
 Route::get('/faq', function () {
-    return Inertia::render('Faq');
+    $footerCategories = Category::orderBy('id')->limit(5)->get(['id', 'name']);
+    return Inertia::render('Faq', [
+        'footerCategories' => $footerCategories,
+    ]);
 })->name('faq');
 
 

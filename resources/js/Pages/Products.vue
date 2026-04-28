@@ -119,7 +119,7 @@
       </div>
     </section>
 
-    <FooterSection />
+    <FooterSection :categories="categories" />
   </div>
 </template>
 

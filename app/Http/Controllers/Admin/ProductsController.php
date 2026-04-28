@@ -14,11 +14,39 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with('category')->orderBy('created_at', 'desc');
+        $query = Product::with('category');
 
         if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('slug', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('slug', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Sorting
+        switch ($request->input('sort_by', 'newest')) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'a-z':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'z-a':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
         }
 
         $products = $query->paginate(5)->withQueryString();
@@ -27,7 +55,7 @@ class ProductsController extends Controller
         return Inertia::render('Admin/Product', [
             'products' => $products,
             'categories' => $categories,
-            'filters' => $request->only(['search']),
+            'filters' => $request->only(['search', 'sort_by', 'date_from', 'date_to']),
             'admin' => [
                 'name' => \Illuminate\Support\Facades\Auth::user()->name,
                 'email' => \Illuminate\Support\Facades\Auth::user()->email,

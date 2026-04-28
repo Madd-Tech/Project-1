@@ -5,7 +5,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-3xl font-bold text-white mb-2">Kelola Produk</h2>
-                    <p class="text-gray-400 text-sm">Buat, perbarui, atau hapus produk.</p>
+                    <p class="text-gray-400 text-sm">Tambah, Update, atau Hapus Produk</p>
                 </div>
                 <div class="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-3">
                     <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Cari Produk..." />
@@ -21,6 +21,15 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 <p class="text-sm font-medium">{{ $page.props.flash.success }}</p>
             </div>
+
+            <!-- Sort & Filter Bar -->
+            <SortFilterBar
+                v-model:sort-by="activeSortBy"
+                v-model:date-from="dateFrom"
+                v-model:date-to="dateTo"
+                @apply="applyFilters"
+                @reset="applyFilters"
+            />
 
             <!-- Products Table -->
             <div class="glass-card rounded-2xl overflow-hidden animate-fade-in-up">
@@ -236,10 +245,11 @@ import AdminLayout from '../Components/AdminLayout.vue';
 import Modal from '../Components/Modal.vue';
 import TextInput from '../Components/TextInput.vue';
 import SearchInput from '../Components/SearchInput.vue';
+import SortFilterBar from '../Components/SortFilterBar.vue';
 
 const props = defineProps({
     products: {
-        type: Object, // Laravel Paginated Object
+        type: Object, 
         required: true,
     },
     categories: {
@@ -257,8 +267,25 @@ const props = defineProps({
 });
 
 const searchQuery = ref(props.filters?.search || '');
+const activeSortBy = ref(props.filters?.sort_by || 'newest');
+const dateFrom = ref(props.filters?.date_from || '');
+const dateTo = ref(props.filters?.date_to || '');
+
+const buildParams = () => {
+    const params = {};
+    if (searchQuery.value) params.search = searchQuery.value;
+    if (activeSortBy.value !== 'newest') params.sort_by = activeSortBy.value;
+    if (dateFrom.value) params.date_from = dateFrom.value;
+    if (dateTo.value) params.date_to = dateTo.value;
+    return params;
+};
+
 const handleSearch = () => {
-    router.get('/admin/products', { search: searchQuery.value }, { preserveState: true, replace: true });
+    router.get('/admin/products', buildParams(), { preserveState: true, replace: true });
+};
+
+const applyFilters = () => {
+    router.get('/admin/products', buildParams(), { preserveState: true, replace: true });
 };
 
 // Create / Edit Logic

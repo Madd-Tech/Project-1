@@ -153,7 +153,7 @@
       </div>
     </section>
 
-    <FooterSection />
+    <FooterSection :categories="footerCategories" />
   </div>
 </template>
 
@@ -166,6 +166,10 @@ import {
 } from 'lucide-vue-next';
 import NavBar from './Components/NavBar.vue';
 import FooterSection from './Components/FooterSection.vue';
+
+const props = defineProps({
+  footerCategories: { type: Array, default: () => [] },
+});
 
 const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '6285695429616';
 

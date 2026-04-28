@@ -8,7 +8,7 @@
                     <p class="text-gray-400 text-sm">Pembaruan stok setiap produk</p>
                 </div>
                 <div class="w-full sm:w-auto">
-                    <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Search products..." />
+                    <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Cari Produk..." />
                 </div>
             </div>
 
@@ -91,8 +91,6 @@
 import { ref } from 'vue';
 import { useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '../Components/AdminLayout.vue';
-import Modal from '../Components/Modal.vue';
-import TextInput from '../Components/TextInput.vue';
 import SearchInput from '../Components/SearchInput.vue';
 
 const props = defineProps({

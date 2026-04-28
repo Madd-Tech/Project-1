@@ -288,7 +288,7 @@
       </div>
     </section>
 
-    <FooterSection />
+    <FooterSection :categories="categories" />
   </div>
 </template>
 
@@ -306,6 +306,7 @@ const props = defineProps({
   averageRating:      { type: Number, default: 0 },
   totalReviews:       { type: Number, default: 0 },
   ratingDistribution: { type: Object, default: () => ({}) },
+  categories:         { type: Array, default: () => [] },
 });
 
 // ── Review form state ──────────────────────────────────────────

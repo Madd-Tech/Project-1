@@ -18,7 +18,14 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 <p class="text-sm font-medium">{{ $page.props.flash.success }}</p>
             </div>
-
+ <!-- Sort & Filter Bar -->
+            <SortFilterBar
+                v-model:sort-by="activeSortBy"
+                v-model:date-from="dateFrom"
+                v-model:date-to="dateTo"
+                @apply="applyFilters"
+                @reset="applyFilters"
+            />
             <!-- Movements History Table -->
             <div class="glass-card rounded-2xl overflow-hidden animate-fade-in-up">
                 <div class="overflow-x-auto">
@@ -170,10 +177,11 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from '../Components/AdminLayout.vue';
 import Modal from '../Components/Modal.vue';
 import TextInput from '../Components/TextInput.vue';
+import SortFilterBar from '../Components/SortFilterBar.vue';
 
 const props = defineProps({
     movements: {
@@ -188,7 +196,28 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    filters: {
+        type: Object,
+        default: () => ({}),
+    },
 });
+
+// Sort & filter state
+const activeSortBy = ref(props.filters?.sort_by || 'newest');
+const dateFrom = ref(props.filters?.date_from || '');
+const dateTo = ref(props.filters?.date_to || '');
+
+const buildParams = () => {
+    const params = {};
+    if (activeSortBy.value !== 'newest') params.sort_by = activeSortBy.value;
+    if (dateFrom.value) params.date_from = dateFrom.value;
+    if (dateTo.value) params.date_to = dateTo.value;
+    return params;
+};
+
+const applyFilters = () => {
+    router.get('/admin/stockmov', buildParams(), { preserveState: true, replace: true });
+};
 
 const isModalOpen = ref(false);
 

@@ -8,7 +8,7 @@
     <TestimonialSection :testimonials="testimonials" />
     <AboutSection />
     <FaqSection />
-    <FooterSection />
+    <FooterSection :categories="categories" />
   </div>
 </template>
 

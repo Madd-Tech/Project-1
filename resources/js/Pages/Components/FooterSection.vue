@@ -46,18 +46,28 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  categories: {
+    type: Array,
+    default: () => [],
+  },
+});
+
 const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '6285695429616';
 
-const footerSections = [
+const categoryLinks = computed(() =>
+  props.categories.slice(0, 5).map(cat => ({
+    text: cat.name,
+    href: `/products?category=${encodeURIComponent(cat.name)}`,
+  }))
+);
+
+const footerSections = computed(() => [
   {
     title: 'Produk',
-    links: [
-      { text: 'Running Shoes', href: '/products' },
-      { text: 'Lifestyle', href: '/products' },
-      { text: 'Basketball', href: '/products' },
-      { text: 'Training', href: '/products' },
-      { text: 'Limited Edition', href: '/products' },
-    ],
+    links: categoryLinks.value,
   },
   {
     title: 'Layanan',
@@ -72,5 +82,5 @@ const footerSections = [
       { text: 'Tentang Kami', href: '/#about' },
     ],
   },
-];
+]);
 </script>

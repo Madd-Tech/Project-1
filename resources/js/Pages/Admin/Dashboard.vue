@@ -112,7 +112,7 @@
 <script setup>
 import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
-import { Package, FolderTree, Tag } from "lucide-vue-next";
+import { Package, FolderTree, Tag, PenIcon } from "lucide-vue-next";
 import AdminLayout from "../../Admin/Components/AdminLayout.vue";
 
 const props = defineProps({
@@ -133,7 +133,7 @@ const stats = computed(() => [
 ]);
 
 const sessionDetails = computed(() => [
-    { label: "Logged in as", value: props.admin.name },
+    { label: "Login Sebagai", value: props.admin.name },
     { label: "Email", value: props.admin.email },
     { label: "Role", value: "Administrator", cls: "text-neon" },
     { label: "Session", value: "Active & Encrypted", cls: "text-electric" },
@@ -142,6 +142,8 @@ const sessionDetails = computed(() => [
 const quickActions = [
     { icon: Package, label: "Produk", href: "/admin/products" },
     { icon: FolderTree, label: "Kategori", href: "/admin/categories" },
-    { icon: Tag, label: "Stok", href: "/admin/stock" },
+    { icon: Tag, label: "Stok Produk", href: "/admin/stock" },
+    { icon: PenIcon, label: "Pencatatan Stok", href: "/admin/stockmov" },
+    
 ];
 </script>
