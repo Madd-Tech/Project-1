@@ -1,5 +1,5 @@
 <template>
-    <CategoryApp :categories="categories" :admin="admin" />
+    <CategoryApp :categories="categories" :admin="admin" :featuredCount="featuredCount" />
 </template>
 
 <script setup>
@@ -13,6 +13,10 @@ defineProps({
     admin: {
         type: Object,
         required: true,
+    },
+    featuredCount: {
+        type: Number,
+        default: 0,
     },
 });
 </script>

@@ -77,7 +77,7 @@
             class="px-5 py-2.5 bg-gradient-to-r from-electric to-neon text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-electric/25 transition-all duration-300 transform hover:scale-105"
             id="nav-cta-btn"
           >
-            Shop Now
+            Belanja Sekarang
           </a>
         </div>
 

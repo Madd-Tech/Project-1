@@ -21,6 +21,7 @@ class CategoriesController extends Controller
 
         return Inertia::render('Admin/Categories', [
             'categories' => $query->get(),
+            'featuredCount' => Category::where('is_featured', true)->count(),
             'filters' => $request->only(['search']),
             'admin' => [
                 'name' => \Illuminate\Support\Facades\Auth::user()->name,
@@ -61,5 +62,34 @@ class CategoriesController extends Controller
     {
         $category->delete();
         return redirect()->back()->with('success', 'Category deleted successfully.');
+    }
+
+    /**
+     * Toggle featured status of a category.
+     * Maximum 6 categories can be featured at a time.
+     */
+    public function toggleFeatured(Category $category)
+    {
+        if (!$category->is_featured) {
+            // Check if we already have 6 featured categories
+            $featuredCount = Category::where('is_featured', true)->count();
+            if ($featuredCount >= 6) {
+                return redirect()->back()->with('error', 'Maksimal 6 kategori yang bisa ditampilkan di halaman utama.');
+            }
+
+            // Set featured_order to next available
+            $maxOrder = Category::where('is_featured', true)->max('featured_order') ?? 0;
+            $category->update([
+                'is_featured' => true,
+                'featured_order' => $maxOrder + 1,
+            ]);
+        } else {
+            $category->update([
+                'is_featured' => false,
+                'featured_order' => null,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Status tampil kategori berhasil diubah.');
     }
 }

@@ -4,8 +4,8 @@
             <!-- Header section -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-white mb-2">Manage Stock</h2>
-                    <p class="text-gray-400 text-sm">Update inventory levels for your products.</p>
+                    <h2 class="text-3xl font-bold text-white mb-2">Stok Produk</h2>
+                    <p class="text-gray-400 text-sm">Pembaruan stok setiap produk</p>
                 </div>
                 <div class="w-full sm:w-auto">
                     <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Search products..." />
@@ -22,11 +22,11 @@
                     <table class="w-full text-left text-sm text-gray-300">
                         <thead class="text-xs text-gray-400 uppercase bg-dark-800/50 border-b border-dark-600/50">
                             <tr>
-                                <th scope="col" class="px-6 py-4 font-medium">Product</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Category</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Current Stock</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Produk</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Kategori</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Stok</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Status</th>
-                                <th scope="col" class="px-6 py-4 font-medium text-right">Actions</th>
+                                <!-- <th scope="col" class="px-6 py-4 font-medium text-right">Actions</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -58,12 +58,7 @@
                                         {{ product.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button @click="openUpdateModal(product)" class="px-3 py-2 bg-electric/10 hover:bg-electric/20 text-electric rounded-lg font-medium transition-colors text-xs border border-electric/20 inline-flex items-center gap-1.5">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                        Update Stock
-                                    </button>
-                                </td>
+                             
                             </tr>
                             <tr v-if="products.data.length === 0">
                                 <td colspan="5" class="px-6 py-12 text-center text-gray-500">
@@ -88,55 +83,7 @@
         </div>
 
         <!-- Stock Update Modal -->
-        <Modal 
-            :is-open="isModalOpen" 
-            @close="closeModal" 
-            title="Update Stock Quantity" 
-            max-width="sm"
-        >
-            <template #icon>
-                <div class="w-8 h-8 rounded-lg bg-electric/10 border border-electric/20 flex items-center justify-center hidden sm:flex">
-                    <svg class="w-4 h-4 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-            </template>
-            
-            <form id="stockForm" @submit.prevent="submitForm" class="space-y-5">
-                <div v-if="selectedProduct" class="p-4 bg-dark-800 border border-dark-600 rounded-xl flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-lg bg-dark-900 border border-dark-600 overflow-hidden flex items-center justify-center shrink-0">
-                         <img v-if="selectedProduct.image" :src="`/storage/${selectedProduct.image}`" class="w-full h-full object-cover">
-                         <svg v-else class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <div>
-                        <div class="text-white font-medium text-sm">{{ selectedProduct.name }}</div>
-                        <div class="text-xs text-gray-400 mt-0.5">Current: <span class="text-electric font-semibold">{{ selectedProduct.stock }}</span> in stock</div>
-                    </div>
-                </div>
-
-                <TextInput 
-                    id="stock"
-                    type="number"
-                    label="New Stock Quantity"
-                    v-model="form.stock"
-                    placeholder="0"
-                    :error="form.errors.stock"
-                    min="0"
-                    required
-                />
-            </form>
-
-            <template #footer>
-                <button type="button" @click="closeModal" class="px-5 py-2.5 bg-dark-700 hover:bg-dark-600 text-white rounded-xl font-medium transition-all">
-                    Cancel
-                </button>
-                <button type="submit" form="stockForm" :disabled="form.processing" class="px-5 py-2.5 bg-electric hover:bg-electric/80 disabled:opacity-50 text-white rounded-xl font-medium transition-all shadow-lg shadow-electric/20 flex items-center gap-2">
-                    <svg v-if="form.processing" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    {{ form.processing ? 'Updating...' : 'Update Stock' }}
-                </button>
-            </template>
-        </Modal>
+       
     </AdminLayout>
 </template>
 

@@ -58,11 +58,4 @@
   </section>
 </template>
 
-<script setup>
-const milestones = [
-  { year: '2020', label: 'Founded', color: 'bg-electric' },
-  { year: '2022', label: 'Expansion', color: 'bg-neon' },
-  { year: '2024', label: 'Online', color: 'bg-amber' },
-  { year: '2026', label: 'Sekarang', color: 'bg-gradient-to-r from-electric to-neon' },
-];
-</script>
+

@@ -28,7 +28,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
     }
 
     $products = $query->paginate(4)->withQueryString();
-    $categories = Category::withCount('products')->take(6)->get();
+    $categories = Category::where('is_featured', true)->withCount('products')->orderBy('featured_order')->get();
 
     $testimonials = \App\Models\ProductReview::with('product')
         ->where('rating', '>=', 4)
@@ -90,5 +90,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/stock/{product}', [StockController::class, 'update'])->name('stock.update');
     Route::get('/stockmov', [StockMovController::class, 'index'])->name('stockmov.index');
     Route::post('/stockmov', [StockMovController::class, 'store'])->name('stockmov.store');
+    Route::post('/categories/{category}/toggle-featured', [CategoriesController::class, 'toggleFeatured'])->name('categories.toggleFeatured');
 
 });

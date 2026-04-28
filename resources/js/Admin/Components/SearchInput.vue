@@ -33,7 +33,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: 'Search...'
+        default: 'Cari...'
     }
 });
 

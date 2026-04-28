@@ -16,10 +16,33 @@
                 </div>
             </div>
 
+            <!-- Featured Count Indicator -->
+            <div class="glass-card rounded-2xl p-4 flex items-center gap-4 animate-fade-in-up">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm text-gray-400">Kategori ditampilkan di halaman utama</p>
+                    <p class="text-white font-semibold">
+                        <span :class="featuredCount >= 6 ? 'text-amber-400' : 'text-electric'">{{ featuredCount }}</span>
+                        <span class="text-gray-500"> / 6 slot terpakai</span>
+                    </p>
+                </div>
+                <div class="hidden sm:flex items-center gap-1.5">
+                    <div v-for="i in 6" :key="i" class="w-3 h-3 rounded-full transition-all duration-300" :class="i <= featuredCount ? 'bg-electric shadow-lg shadow-electric/30' : 'bg-dark-600'"></div>
+                </div>
+            </div>
+
             <!-- Flash Success Message -->
             <div v-if="$page.props.flash?.success" class="px-4 py-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl flex items-center gap-3 animate-fade-in-up">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 <p class="text-sm font-medium">{{ $page.props.flash.success }}</p>
+            </div>
+
+            <!-- Flash Error Message -->
+            <div v-if="$page.props.flash?.error" class="px-4 py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl flex items-center gap-3 animate-fade-in-up">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p class="text-sm font-medium">{{ $page.props.flash.error }}</p>
             </div>
 
             <!-- Categories Table/List -->
@@ -31,6 +54,7 @@
                                 <th scope="col" class="px-6 py-4 font-medium">ID</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Nama Kategori</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Slug</th>
+                                <th scope="col" class="px-6 py-4 font-medium text-center">Tampil di Beranda</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Dibuat Pada</th>
                                 <th scope="col" class="px-6 py-4 font-medium text-right">Aksi</th>
                             </tr>
@@ -38,11 +62,32 @@
                         <tbody>
                             <tr v-for="category in categories" :key="category.id" class="border-b border-dark-600/30 hover:bg-dark-700/30 transition-colors">
                                 <td class="px-6 py-4 font-medium text-white">#{{ category.id }}</td>
-                                <td class="px-6 py-4">{{ category.name }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-2">
+                                        <span>{{ category.name }}</span>
+                                        <span v-if="category.is_featured" class="px-1.5 py-0.5 text-[10px] font-semibold bg-electric/10 text-electric border border-electric/20 rounded-md uppercase tracking-wider">
+                                            Featured
+                                        </span>
+                                    </div>
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2.5 py-1 text-[10px] font-medium bg-dark-800 text-gray-300 rounded-md border border-dark-600">
                                         {{ category.slug }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <button
+                                        @click="toggleFeatured(category)"
+                                        :disabled="featuredForm.processing"
+                                        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-electric/50 focus:ring-offset-2 focus:ring-offset-dark-800"
+                                        :class="category.is_featured ? 'bg-electric' : 'bg-dark-600 hover:bg-dark-500'"
+                                        :title="category.is_featured ? 'Nonaktifkan dari beranda' : 'Tampilkan di beranda'"
+                                    >
+                                        <span
+                                            class="inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform duration-300"
+                                            :class="category.is_featured ? 'translate-x-6' : 'translate-x-1'"
+                                        ></span>
+                                    </button>
                                 </td>
                                 <td class="px-6 py-4">{{ new Date(category.created_at).toLocaleDateString() }}</td>
                                 <td class="px-6 py-4 text-right">
@@ -57,7 +102,7 @@
                                 </td>
                             </tr>
                             <tr v-if="categories.length === 0">
-                                <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="w-12 h-12 mb-3 text-dark-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                         <p>Belum ada kategori, buat kategori baru!</p>
@@ -119,7 +164,7 @@
                  <div class="w-16 h-16 mx-auto bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                     <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <p class="text-gray-300">Are you sure you want to delete <span class="text-white font-medium">"{{ categoryToDelete?.name }}"</span>? This action cannot be undone.</p>
+                <p class="text-gray-300">Anda yakin ingin menghapus? <span class="text-white font-medium">"{{ categoryToDelete?.name }}"</span>? This action cannot be undone.</p>
             </div>
 
             <template #footer>
@@ -154,6 +199,10 @@ const props = defineProps({
     filters: {
         type: Object,
         default: () => ({}),
+    },
+    featuredCount: {
+        type: Number,
+        default: 0,
     },
 });
 
@@ -201,6 +250,15 @@ const submitForm = () => {
             onSuccess: () => closeModal(),
         });
     }
+};
+
+// Toggle Featured Logic
+const featuredForm = useForm({});
+
+const toggleFeatured = (category) => {
+    featuredForm.post(`/admin/categories/${category.id}/toggle-featured`, {
+        preserveScroll: true,
+    });
 };
 
 // Delete Logic

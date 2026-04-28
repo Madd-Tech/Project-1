@@ -1,5 +1,5 @@
 <template>
-  <section class="py-20 sm:py-28 relative overflow-hidden" id="testimonial-section">
+  <section v-if="hasEnoughTestimonials" class="py-20 sm:py-28 relative overflow-hidden" id="testimonial-section">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber/5 rounded-full blur-[200px]"></div>
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="text-center mb-16">
@@ -113,9 +113,12 @@ const props = defineProps({
   }
 });
 
+// Only show the section when there are at least 4 testimonials
+const hasEnoughTestimonials = computed(() => props.testimonials && props.testimonials.length >= 4);
+
 // Calculate duplicate amounts based on available entries
 const duplicatedTestimonials = computed(() => {
-  if (!props.testimonials || props.testimonials.length === 0) return [];
+  if (!hasEnoughTestimonials.value) return [];
   // At least duplicate up to 8 items to ensure marquee continuity on large screens
   const minimalTotalItems = 8;
   const multiplier = Math.max(1, Math.ceil(minimalTotalItems / props.testimonials.length));

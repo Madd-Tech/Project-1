@@ -17,11 +17,11 @@
           class="glass-card rounded-3xl p-8 text-center group cursor-pointer relative overflow-hidden"
         >
           <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500" :class="getCategoryStyles(index).gradient"></div>
-          <div :class="['w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110', getCategoryStyles(index).iconBg]">
+          <!-- <div :class="['w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110', getCategoryStyles(index).iconBg]">
             <component :is="getCategoryStyles(index).icon" class="w-8 h-8 text-white" />
-          </div>
+          </div> -->
           <h3 class="text-xl font-[Outfit] font-bold text-white mb-2">{{ category.name }}</h3>
-          <p class="text-gray-400 text-sm mb-4">{{ getCategoryStyles(index).desc }}</p>
+          <!-- <p class="text-gray-400 text-sm mb-4">{{ getCategoryStyles(index).desc }}</p> -->
           <span :class="['text-sm font-semibold', getCategoryStyles(index).textColor]">{{ category.products_count || 0 }} Products →</span>
         </div>
       </div>

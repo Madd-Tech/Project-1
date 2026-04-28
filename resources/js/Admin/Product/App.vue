@@ -4,14 +4,14 @@
             <!-- Header section -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-white mb-2">Manage Products</h2>
-                    <p class="text-gray-400 text-sm">Create, update, or delete products.</p>
+                    <h2 class="text-3xl font-bold text-white mb-2">Kelola Produk</h2>
+                    <p class="text-gray-400 text-sm">Buat, perbarui, atau hapus produk.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-3">
-                    <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Search products..." />
+                    <SearchInput v-model="searchQuery" @search="handleSearch" @clear="handleSearch" placeholder="Cari Produk..." />
                     <button @click="openCreateModal" class="px-5 py-2.5 bg-electric hover:bg-electric/80 text-white rounded-xl font-medium transition-all shadow-lg shadow-electric/20 flex items-center justify-center gap-2 whitespace-nowrap">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Add Product
+                        Tambah Produk
                     </button>
                 </div>
             </div>
@@ -28,12 +28,12 @@
                     <table class="w-full text-left text-sm text-gray-300">
                         <thead class="text-xs text-gray-400 uppercase bg-dark-800/50 border-b border-dark-600/50">
                             <tr>
-                                <th scope="col" class="px-6 py-4 font-medium">Image</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Name</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Category</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Price</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Gambar</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Nama</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Kategori</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Harga</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Status</th>
-                                <th scope="col" class="px-6 py-4 font-medium text-right">Actions</th>
+                                <th scope="col" class="px-6 py-4 font-medium text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +74,7 @@
                                 <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="w-12 h-12 mb-3 text-dark-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                                        <p>No products found. Create your first product!</p>
+                                        <p>Belum ada produk. Buat produk pertamamu!</p>
                                     </div>
                                 </td>
                             </tr>
@@ -108,12 +108,12 @@
             <form id="productForm" @submit.prevent="submitForm" class="space-y-5">
                 <!-- Image Upload (Custom Drag/Drop UI) -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-2">Product Image <span v-if="!isEditing" class="text-electric">*</span></label>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Gambar Produk <span v-if="!isEditing" class="text-electric">*</span></label>
                     <div class="relative group mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dark-600 border-dashed rounded-2xl hover:border-electric transition-colors bg-dark-800 overflow-hidden" @click="$refs.fileInput.click()">
                         <div v-if="imagePreview" class="absolute inset-0 bg-dark-900 border border-dark-600">
                              <img :src="imagePreview" class="w-full h-full object-contain">
                              <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                                 <span class="text-white text-sm font-medium">Change Image</span>
+                                 <span class="text-white text-sm font-medium">Ubah Gambar</span>
                              </div>
                         </div>
                         <div v-else class="space-y-1 text-center cursor-pointer">
@@ -135,18 +135,18 @@
 
                 <TextInput 
                     id="name"
-                    label="Product Name"
+                    label="Nama Produk"
                     v-model="form.name"
-                    placeholder="e.g. Wireless Headphones"
+                    placeholder="e.g. Sepatu Nike, Sepatu Adidas"
                     :error="form.errors.name"
                     required
                 />
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Category</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Kategori</label>
                         <select v-model="form.category_id" class="w-full bg-dark-900 border border-dark-600 rounded-xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-electric/50 focus:border-electric transition-all shadow-inner appearance-none" required>
-                            <option value="" disabled>Select a category</option>
+                            <option value="" disabled>Pilih Kategori</option>
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                         </select>
                          <p v-if="form.errors.category_id" class="text-red-400 text-xs mt-2">{{ form.errors.category_id }}</p>
@@ -214,7 +214,7 @@
                  <div class="w-16 h-16 mx-auto bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                     <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <p class="text-gray-300">Are you sure you want to delete <span class="text-white font-medium">"{{ productToDelete?.name }}"</span>? This action cannot be undone.</p>
+                <p class="text-gray-300">Anda yakin ingin menghapus? <span class="text-white font-medium">"{{ productToDelete?.name }}"</span>?</p>
             </div>
 
             <template #footer>

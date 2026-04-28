@@ -4,8 +4,8 @@
             <!-- Header section -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold text-white mb-2">Stock Activity Log</h2>
-                    <p class="text-gray-400 text-sm">Monitor all stock inflows and outflows across your inventory.</p>
+                    <h2 class="text-3xl font-bold text-white mb-2">Riwayat Pencatatan Stok</h2>
+                    <p class="text-gray-400 text-sm">Monitoring semua pemasukan dan pengeluaran stok di seluruh inventaris Anda.</p>
                 </div>
                 <button @click="openRecordModal()" class="px-5 py-2.5 bg-electric hover:bg-electric/90 text-white rounded-xl font-semibold transition-all shadow-lg shadow-electric/20 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -27,9 +27,9 @@
                             <tr>
                                 <th scope="col" class="px-6 py-4 font-medium">Tanggal & Waktu</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Produk</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Type</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Masuk/Keluar</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Quantity</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Reference</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,7 @@
                                 <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="w-12 h-12 mb-3 text-dark-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        <p>No stock movements recorded yet.</p>
+                                        <p>Belum ada pencatatan stok.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -99,9 +99,9 @@
             <form id="stockForm" @submit.prevent="submitForm" class="space-y-5">
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1.5">Select Product</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-1.5">Pilih Produk</label>
                         <select v-model="form.product_id" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-electric focus:border-transparent transition-all">
-                            <option value="" disabled>Choose a product...</option>
+                            <option value="" disabled>Pilih Produk...</option>
                             <option v-for="p in allProducts" :key="p.id" :value="p.id">
                                 {{ p.name }} (Current: {{ p.stock }})
                             </option>
@@ -110,7 +110,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1.5">Movement Type</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-1.5">Jenis Stok</label>
                         <div class="grid grid-cols-2 gap-3">
                             <button type="button" 
                                 @click="form.type = 'produk masuk'"
@@ -144,9 +144,9 @@
                     <TextInput 
                         id="reference"
                         type="text"
-                        label="Reference (Optional)"
+                        label="Keterangan (Opsional)"
                         v-model="form.reference"
-                        placeholder="e.g. Sales, Purchase, Damage"
+                        placeholder="ex: terjual, masuk, rusak..."
                         :error="form.errors.reference"
                     />
                 </div>

@@ -62,7 +62,6 @@ const footerSections = [
   {
     title: 'Layanan',
     links: [
-      { text: 'Ukuran Sepatu', href: '/faq' },
       { text: 'FAQ', href: '/faq' },
       { text: 'Hubungi Kami', href: `https://wa.me/${waNumber}` },
     ],
@@ -71,8 +70,6 @@ const footerSections = [
     title: 'Perusahaan',
     links: [
       { text: 'Tentang Kami', href: '/#about' },
-      { text: 'Karir', href: '#' },
-      { text: 'Blog', href: '#' },
     ],
   },
 ];
