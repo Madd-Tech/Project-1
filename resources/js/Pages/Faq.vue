@@ -208,36 +208,13 @@ const faqs = [
     question: 'Bisakah saya memesan lebih dari satu produk sekaligus?',
     answer: 'Tentu! Anda bisa menambahkan beberapa produk ke keranjang belanja, lalu melakukan checkout sekaligus. Semua produk dalam keranjang akan otomatis masuk ke dalam pesan WhatsApp Anda.',
   },
-  // {
-  //   category: 'product',
-  //   icon: CheckCircle,
-  //   question: 'Apakah semua produk di BubuihanStore dijamin original?',
-  //   answer: 'Ya, 100% original. Semua produk yang kami jual adalah produk asli dari brand resmi. Kami bekerja sama langsung dengan distributor resmi untuk memastikan keaslian setiap produk. Garansi keaslian berlaku untuk semua produk.',
-  // },
-  // {
-  //   category: 'product',
-  //   icon: Ruler,
-  //   question: 'Bagaimana cara menentukan ukuran sepatu yang tepat?',
-  //   answer: 'Setiap halaman produk dilengkapi dengan panduan ukuran. Anda juga bisa menghubungi tim kami via WhatsApp untuk konsultasi ukuran secara personal. Kami akan membantu Anda menemukan ukuran yang paling pas.',
-  // },
   {
     category: 'product',
     icon: Search,
     question: 'Apakah saya bisa melihat review dari pembeli lain?',
     answer: 'Ya! Setiap produk memiliki halaman detail yang menampilkan ulasan dan rating dari pembeli sebelumnya. Anda bisa mengecek pengalaman pelanggan lain sebelum memutuskan untuk membeli.',
   },
-  // {
-  //   category: 'shipping',
-  //   icon: Truck,
-  //   question: 'Berapa lama estimasi pengiriman?',
-  //   answer: 'Untuk area Jawa biasanya 2-3 hari kerja, luar Jawa 3-5 hari kerja, dan untuk daerah terpencil bisa memakan waktu 5-7 hari kerja. Kami menggunakan jasa ekspedisi terpercaya untuk memastikan paket sampai dengan aman.',
-  // },
-  // {
-  //   category: 'shipping',
-  //   icon: Package,
-  //   question: 'Apakah ada gratis ongkir?',
-  //   answer: 'Ya! Kami memberikan gratis ongkir ke seluruh Indonesia tanpa minimum pembelian. Promo ini berlaku untuk semua produk yang tersedia di toko kami.',
-  // },
+
   {
     category: 'shipping',
     icon: MapPin,
@@ -248,7 +225,7 @@ const faqs = [
     category: 'payment',
     icon: CreditCard,
     question: 'Metode pembayaran apa saja yang tersedia?',
-    answer: 'Saat ini kami menerima pembayaran melalui transfer bank (BCA, BNI, Mandiri, BRI), e-wallet (GoPay, OVO, Dana, ShopeePay), dan COD (Cash on Delivery) untuk area tertentu. Detail pembayaran akan diinformasikan saat Anda menghubungi kami via WhatsApp.',
+    answer: 'Saat ini kami menerima pembayaran melalui transfer bank (BCA, BNI, Mandiri, BRI), e-wallet (GoPay, OVO, Dana, ShopeePay). Detail pembayaran akan diinformasikan saat Anda menghubungi kami via WhatsApp.',
   },
   {
     category: 'payment',
@@ -258,15 +235,9 @@ const faqs = [
   },
   {
     category: 'return',
-    icon: RefreshCw,
-    question: 'Bagaimana kebijakan pengembalian barang?',
-    answer: 'Kami menyediakan kebijakan pengembalian dalam 30 hari sejak barang diterima. Barang harus dalam kondisi belum digunakan, lengkap dengan tag dan packaging asli. Hubungi kami via WhatsApp untuk memulai proses pengembalian.',
-  },
-  {
-    category: 'return',
     icon: CircleDollarSign,
     question: 'Apakah saya bisa mendapat refund?',
-    answer: 'Ya! Jika produk yang Anda terima cacat, salah ukuran, atau tidak sesuai deskripsi, kami akan memberikan opsi pengembalian dana penuh atau tukar produk. Proses refund biasanya memakan waktu 3-5 hari kerja setelah barang kami terima kembali.',
+    answer: 'Tidak! Jika produk yang Anda terima cacat, salah ukuran, atau tidak sesuai deskripsi, kami tidak akan memberikan opsi pengembalian dana penuh atau tukar produk.',
   },
   {
     category: 'return',

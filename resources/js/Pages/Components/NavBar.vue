@@ -31,19 +31,44 @@
         <!-- Right Section -->
         <div class="hidden md:flex items-center gap-4" id="nav-actions">
           <!-- Search -->
-          <form @submit.prevent="performSearch" class="relative flex items-center group">
-            <input 
-              v-model="searchQuery"
-              type="text" 
-              placeholder="Search products..." 
-              class="w-32 focus:w-48 bg-transparent focus:bg-white/5 border border-transparent focus:border-white/10 rounded-full py-1.5 pl-3 pr-8 text-sm text-white placeholder-gray-500 transition-all duration-300 outline-none"
+          <div class="relative flex items-center">
+            <transition
+              enter-active-class="transition duration-200 ease-out"
+              enter-from-class="opacity-0 w-0"
+              enter-to-class="opacity-100 w-48"
+              leave-active-class="transition duration-150 ease-in"
+              leave-from-class="opacity-100 w-48"
+              leave-to-class="opacity-0 w-0"
             >
-            <button type="submit" class="absolute right-2 p-1 text-gray-500 group-hover:text-white transition-colors" id="nav-search-btn">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <form v-if="isSearchOpen" @submit.prevent="performSearch" class="flex items-center" id="nav-search-form">
+                <input
+                  ref="searchInputRef"
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="Search products..."
+                  @keydown.esc="closeSearch"
+                  class="w-48 bg-white/5 border border-white/10 rounded-full py-1.5 pl-3 pr-8 text-sm text-white placeholder-gray-500 outline-none"
+                  id="nav-search-input"
+                >
+                <button type="submit" class="absolute right-2 p-1 text-gray-400 hover:text-white transition-colors" id="nav-search-btn">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </form>
+            </transition>
+            <button
+              v-if="!isSearchOpen"
+              @click="openSearch"
+              class="p-2 text-gray-400 hover:text-white transition-colors"
+              id="nav-search-toggle"
+              aria-label="Open search"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-          </form>
+          </div>
 
           <!-- Cart -->
           <button
@@ -133,12 +158,27 @@
           >
             {{ item.label }}
           </a>
-          <div class="mt-3 pt-3 border-t border-white/10 flex items-center gap-3 px-4">
-            <button class="p-2 text-gray-400 hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+          <div class="mt-3 pt-3 border-t border-white/10 flex flex-col gap-3 px-4">
+            <!-- Mobile Search Form -->
+            <form @submit.prevent="performMobileSearch" class="flex items-center gap-2 w-full" id="nav-mobile-search-form">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search products..."
+                class="flex-1 bg-white/5 border border-white/10 rounded-xl py-2 px-4 text-sm text-white placeholder-gray-500 outline-none focus:border-white/20"
+                id="nav-mobile-search-input"
+              >
+              <button
+                type="submit"
+                class="p-2 bg-gradient-to-r from-electric to-neon rounded-xl text-white hover:opacity-90 transition-opacity flex-shrink-0"
+                id="nav-mobile-search-btn"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            </form>
+            <div class="flex items-center gap-3">
             <a
               href="/products"
               class="flex-1 text-center px-4 py-2.5 bg-gradient-to-r from-electric to-neon text-white text-sm font-semibold rounded-xl"
@@ -146,6 +186,7 @@
             >
               Shop Now
             </a>
+            </div>
           </div>
         </div>
       </transition>
@@ -157,7 +198,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { useCart } from '../../Composables/useCart';
 import CartDrawer from './CartDrawer.vue';
@@ -170,10 +211,33 @@ const props = defineProps({
 });
 
 const searchQuery = ref(props.filters?.search || '');
+const isSearchOpen = ref(!!(props.filters?.search));
+const searchInputRef = ref(null);
+
+// Keep searchQuery in sync if filters prop changes (e.g. navigating pages)
+watch(() => props.filters?.search, (val) => {
+  searchQuery.value = val || '';
+});
+
+const openSearch = async () => {
+  isSearchOpen.value = true;
+  await nextTick();
+  searchInputRef.value?.focus();
+};
+
+const closeSearch = () => {
+  if (!searchQuery.value) {
+    isSearchOpen.value = false;
+  }
+};
 
 const performSearch = () => {
-  // Will submit search to the current URL so it works on both Home and Products page
   router.get(window.location.pathname, { search: searchQuery.value }, { preserveState: true, replace: true, preserveScroll: true });
+};
+
+const performMobileSearch = () => {
+  mobileMenuOpen.value = false;
+  router.get('/products', { search: searchQuery.value }, { preserveState: false });
 };
 
 const { totalItems, toggleDrawer } = useCart();

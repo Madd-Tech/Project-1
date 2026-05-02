@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\StockMovController;
+use App\Http\Controllers\Admin\ReviewsController;
 
 use App\Http\Controllers\ProductDetailController;
 use Inertia\Inertia;
@@ -94,5 +95,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/stockmov', [StockMovController::class, 'index'])->name('stockmov.index');
     Route::post('/stockmov', [StockMovController::class, 'store'])->name('stockmov.store');
     Route::post('/categories/{category}/toggle-featured', [CategoriesController::class, 'toggleFeatured'])->name('categories.toggleFeatured');
-
+    Route::get('/reviews', [ReviewsController::class, 'index'])->name('reviews.index');
+    Route::delete('/reviews/{review}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 });

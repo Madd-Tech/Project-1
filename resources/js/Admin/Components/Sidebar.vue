@@ -50,7 +50,10 @@
 
                     <!-- Stock Icon -->
                     <svg v-else-if="item.label === 'Stock'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <svg v-else-if="item.label === 'StockMov'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg v-else-if="item.label === 'StockMov' || item.label === 'Catat Stok'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                    <!-- Review Icon -->
+                    <svg v-else-if="item.label === 'Review'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
 
                 </div>
                 <span class="z-10">{{ item.label }}</span>
@@ -86,9 +89,9 @@ const navItems = [
     { label: 'Dashboard', href: '/admin/dashboard' },
     { label: 'Kategori', href: '/admin/categories' },
     { label: 'Produk', href: '/admin/products' },
+    { label: 'Review', href: '/admin/reviews' },
     { label: 'Stok', href: '/admin/stock' },
     { label: 'Catat Stok', href: '/admin/stockmov' },
-
 ];
 
 const isActive = (href) => {
