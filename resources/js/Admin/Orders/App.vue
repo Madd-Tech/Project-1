@@ -266,13 +266,13 @@ const statusFilter = ref(props.filters?.status || '');
 const paymentFilter = ref(props.filters?.payment_method || '');
 const sortBy = ref(props.filters?.sort_by || 'newest');
 
-const statCards = computed(() => [
-    { label: 'Total', value: props.stats.total, color: 'text-white' },
-    { label: 'Pending', value: props.stats.pending, color: 'text-amber-400' },
-    { label: 'Confirmed', value: props.stats.confirmed, color: 'text-blue-400' },
-    { label: 'Completed', value: props.stats.completed, color: 'text-green-400' },
-    { label: 'Cancelled', value: props.stats.cancelled, color: 'text-red-400' },
-]);
+    const statCards = computed(() => [
+        { label: 'Total', value: props.stats.total, color: 'text-white' },
+        { label: 'Pending', value: props.stats.pending, color: 'text-amber-400' },
+        { label: 'Confirmed', value: props.stats.confirmed, color: 'text-blue-400' },
+        { label: 'Completed', value: props.stats.completed, color: 'text-green-400' },
+        { label: 'Cancelled', value: props.stats.cancelled, color: 'text-red-400' },
+    ]);
 
 const hasActiveFilters = computed(() => statusFilter.value || paymentFilter.value || sortBy.value !== 'newest');
 
