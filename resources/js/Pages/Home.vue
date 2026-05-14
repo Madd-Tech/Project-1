@@ -5,8 +5,8 @@
     <BrandMarquee />
     <ProductSection :products="products" :categories="categories" :filters="filters" />
     <CategorySection :categories="categories" />
-    <TestimonialSection :testimonials="testimonials" />
     <AboutSection />
+    <TestimonialSection :testimonials="testimonials" />
     <FaqSection />
     <FooterSection :categories="categories" />
   </div>

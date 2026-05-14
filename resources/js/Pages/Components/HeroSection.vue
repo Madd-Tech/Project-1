@@ -15,7 +15,7 @@
         <div class="animate-slide-in-left">
           <div class="inline-flex items-center gap-2 px-4 py-2 glass rounded-full mb-6">
             <span class="w-2 h-2 bg-neon rounded-full animate-pulse"></span>
-            <span class="text-sm text-gray-300 font-medium">New Collection 2026</span>
+            <span class="text-sm text-gray-300 font-medium">New Collection</span>
           </div>
 
           <h1 class="text-4xl sm:text-5xl lg:text-7xl font-[Outfit] font-black leading-[1.1] mb-6">

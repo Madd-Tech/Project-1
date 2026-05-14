@@ -75,8 +75,10 @@ class ProductsController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-            $validated['image'] = $imagePath;
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('storage/product'), $filename);
+            $validated['image'] = 'product/' . $filename;
         }
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
@@ -99,11 +101,13 @@ class ProductsController extends Controller
 
         if ($request->hasFile('image')) {
            
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
-                Storage::disk('public')->delete($product->image);
+            if ($product->image && file_exists(public_path('storage/' . $product->image))) {
+                unlink(public_path('storage/' . $product->image));
             }
-            $imagePath = $request->file('image')->store('products', 'public');
-            $validated['image'] = $imagePath;
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('storage/product'), $filename);
+            $validated['image'] = 'product/' . $filename;
         } else {
             unset($validated['image']);
         }
@@ -119,8 +123,8 @@ class ProductsController extends Controller
 
     public function destroy(Product $product)
     {
-        if ($product->image && Storage::disk('public')->exists($product->image)) {
-            Storage::disk('public')->delete($product->image);
+        if ($product->image && file_exists(public_path('storage/' . $product->image))) {
+            unlink(public_path('storage/' . $product->image));
         }
         
         $product->delete();

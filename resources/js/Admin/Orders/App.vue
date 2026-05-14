@@ -266,13 +266,13 @@ const statusFilter = ref(props.filters?.status || '');
 const paymentFilter = ref(props.filters?.payment_method || '');
 const sortBy = ref(props.filters?.sort_by || 'newest');
 
-    const statCards = computed(() => [
-        { label: 'Total', value: props.stats.total, color: 'text-white' },
-        { label: 'Pending', value: props.stats.pending, color: 'text-amber-400' },
-        { label: 'Confirmed', value: props.stats.confirmed, color: 'text-blue-400' },
-        { label: 'Completed', value: props.stats.completed, color: 'text-green-400' },
-        { label: 'Cancelled', value: props.stats.cancelled, color: 'text-red-400' },
-    ]);
+const statCards = computed(() => [
+    { label: 'Total', value: props.stats.total, color: 'text-white' },
+    { label: 'Pending', value: props.stats.pending, color: 'text-amber-400' },
+    { label: 'Confirmed', value: props.stats.confirmed, color: 'text-blue-400' },
+    { label: 'Completed', value: props.stats.completed, color: 'text-green-400' },
+    { label: 'Cancelled', value: props.stats.cancelled, color: 'text-red-400' },
+]);
 
 const hasActiveFilters = computed(() => statusFilter.value || paymentFilter.value || sortBy.value !== 'newest');
 
@@ -326,8 +326,8 @@ const deleteOrder = () => {
 
 // Bank account config
 const bankName = 'BCA';
-const bankAccount = '1234567890';
-const bankHolder = 'BubuihanStore';
+const bankAccount = '7295250216';
+const bankHolder = 'perilispami';
 
 // Format phone to international WhatsApp format (08xx -> 628xx)
 const formatPhoneForWa = (phone) => {
@@ -343,7 +343,15 @@ const buildTransferMessage = (order) => {
         .map(item => `- ${item.product_name} (x${item.quantity})`)
         .join('\n');
 
-    return `Halo *${order.customer_name}*! 👋\n\nPesanan Anda telah *dikonfirmasi* ✅\n\n📦 *No. Pesanan:* ${order.order_number}\n📋 *Detail Produk:*\n${itemList}\n\n💰 *Total: Rp ${formatPrice(order.total_amount)}*\n\nSilakan transfer ke rekening berikut:\n🏦 *Bank:* ${bankName}\n💳 *No. Rekening:* ${bankAccount}\n👤 *Atas Nama:* ${bankHolder}\n\nSetelah transfer, mohon kirimkan bukti pembayaran ke chat ini.\n\nTerima kasih! 🙏`;
+    return `Halo *${order.customer_name}*! 
+    👋\n\nPesanan Anda telah *dikonfirmasi* ✅
+    \n\n*No. Pesanan:* ${order.order_number}\n
+    *Detail Produk:*\n${itemList}\n\n 
+    *Total: Rp ${formatPrice(order.total_amount)}*
+    \n\nSilakan transfer ke rekening berikut:\n
+    *Bank:* ${bankName}\n
+    *No. Rekening:* ${bankAccount}\n
+    *Atas Nama:* ${bankHolder}\n\nSetelah transfer, mohon kirimkan bukti pembayaran ke chat ini.\n\nTerima kasih! 🙏`;
 };
 
 // Dedicated confirm button — always sends WhatsApp with bank info
