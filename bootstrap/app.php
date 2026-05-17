@@ -19,6 +19,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
+        $middleware->redirectGuestsTo(function ($request) {
+            // If the request was guarded by 'customer', redirect to customer auth
+            if ($request->is('checkout*')) {
+                return route('customer.auth', ['redirect' => $request->url()]);
+            }
+            return route('login');
+        });
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

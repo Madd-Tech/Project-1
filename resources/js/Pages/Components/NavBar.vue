@@ -17,7 +17,7 @@
 
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center gap-1" id="nav-desktop-menu">
-          <a
+          <Link
             v-for="item in navItems"
             :key="item.label"
             :href="item.href"
@@ -25,11 +25,24 @@
           >
             {{ item.label }}
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-electric to-neon group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
-          </a>
+          </Link>
         </div>
 
         <!-- Right Section -->
         <div class="hidden md:flex items-center gap-4" id="nav-actions">
+          <div class="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/5">
+            <svg class="w-4 h-4 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.97 10.97 0 0112 15c2.586 0 4.966.893 6.879 2.386M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <Link v-if="isCustomerLoggedIn" href="/customer/profile" class="text-xs font-semibold text-gray-200 hover:text-white transition-colors">
+              {{ customerName }} (Edit Profile)
+            </Link>
+            <template v-else>
+              <span class="text-xs text-gray-300">Guest</span>
+              <Link :href="customerLoginUrl" class="text-xs font-semibold text-electric hover:text-neon transition-colors">Login Here</Link>
+            </template>
+          </div>
+
           <!-- Search -->
           <div class="relative flex items-center">
             <transition
@@ -97,17 +110,21 @@
           </button>
 
           <!-- CTA Button -->
-          <a
+          <Link
             href="/products"
             class="px-5 py-2.5 bg-gradient-to-r from-electric to-neon text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-electric/25 transition-all duration-300 transform hover:scale-105"
             id="nav-cta-btn"
           >
             Belanja Sekarang
-          </a>
+          </Link>
+
         </div>
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center gap-2">
+          <Link v-if="isCustomerLoggedIn" href="/customer/profile" class="px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-white/20 text-gray-300">Profile</Link>
+          <Link v-else :href="customerLoginUrl" class="px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border border-electric/40 text-electric">Login</Link>
+
           <!-- Mobile Cart -->
           <button
             @click="toggleDrawer"
@@ -149,7 +166,7 @@
         leave-to-class="opacity-0 -translate-y-4"
       >
         <div v-if="mobileMenuOpen" class="md:hidden mt-4 glass rounded-2xl p-4" id="nav-mobile-menu">
-          <a
+          <Link
             v-for="item in navItems"
             :key="item.label"
             :href="item.href"
@@ -157,7 +174,7 @@
             @click="mobileMenuOpen = false"
           >
             {{ item.label }}
-          </a>
+          </Link>
           <div class="mt-3 pt-3 border-t border-white/10 flex flex-col gap-3 px-4">
             <!-- Mobile Search Form -->
             <form @submit.prevent="performMobileSearch" class="flex items-center gap-2 w-full" id="nav-mobile-search-form">
@@ -179,13 +196,13 @@
               </button>
             </form>
             <div class="flex items-center gap-3">
-            <a
+            <Link
               href="/products"
               class="flex-1 text-center px-4 py-2.5 bg-gradient-to-r from-electric to-neon text-white text-sm font-semibold rounded-xl"
               @click="mobileMenuOpen = false"
             >
               Shop Now
-            </a>
+            </Link>
             </div>
           </div>
         </div>
@@ -198,8 +215,8 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { ref, watch, nextTick, onMounted, onUnmounted, computed } from 'vue';
+import { router, Link, usePage } from '@inertiajs/vue3';
 import { useCart } from '../../Composables/useCart';
 import CartDrawer from './CartDrawer.vue';
 
@@ -209,6 +226,11 @@ const props = defineProps({
     default: () => ({ search: '' })
   }
 });
+const page = usePage();
+const customer = computed(() => page.props.auth?.customer || null);
+const isCustomerLoggedIn = computed(() => !!customer.value);
+const customerName = computed(() => customer.value?.name || 'Guest');
+const customerLoginUrl = computed(() => `/customer/auth?redirect=${encodeURIComponent('/')}`);
 
 const searchQuery = ref('');
 const isSearchOpen = ref(false);

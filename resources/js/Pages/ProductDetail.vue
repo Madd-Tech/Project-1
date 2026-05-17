@@ -156,75 +156,86 @@
                 {{ $page.props.flash.success }}
               </div>
 
-              <form @submit.prevent="submitReview" class="space-y-4">
-                <!-- Star picker -->
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Rating *</label>
-                  <div class="flex items-center gap-1">
-                    <button
-                      v-for="star in 5"
-                      :key="star"
-                      type="button"
-                      @click="form.rating = star"
-                      @mouseover="hoverRating = star"
-                      @mouseleave="hoverRating = 0"
-                      :class="['w-9 h-9 transition-all duration-150 transform hover:scale-125 focus:outline-none', (hoverRating || form.rating) >= star ? 'text-amber' : 'text-gray-600']"
-                    >
-                      <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                    </button>
-                    <span class="ml-2 text-sm text-gray-400">{{ ratingLabels[form.rating] || 'Pilih rating' }}</span>
-                  </div>
-                  <p v-if="errors.rating" class="mt-1 text-xs text-red-400">{{ errors.rating }}</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm text-gray-400 mb-1.5">Nama *</label>
-                    <input
-                      v-model="form.reviewer_name"
-                      type="text"
-                      placeholder="Nama Anda"
-                      class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-electric/50 focus:border-electric/50 transition-colors text-sm"
-                    >
-                    <p v-if="errors.reviewer_name" class="mt-1 text-xs text-red-400">{{ errors.reviewer_name }}</p>
-                  </div>
-                  <div>
-                    <label class="block text-sm text-gray-400 mb-1.5">Email (opsional)</label>
-                    <input
-                      v-model="form.reviewer_email"
-                      type="email"
-                      placeholder="email@contoh.com"
-                      class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-electric/50 focus:border-electric/50 transition-colors text-sm"
-                    >
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block text-sm text-gray-400 mb-1.5">Ulasan *</label>
-                  <textarea
-                    v-model="form.comment"
-                    rows="4"
-                    placeholder="Ceritakan pengalaman Anda dengan produk ini..."
-                    class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-electric/50 focus:border-electric/50 transition-colors text-sm resize-none"
-                  ></textarea>
-                  <p v-if="errors.comment" class="mt-1 text-xs text-red-400">{{ errors.comment }}</p>
-                  <p class="mt-1 text-xs text-gray-600">{{ form.comment.length }}/1000 karakter</p>
-                </div>
-
-                <button
-                  type="submit"
-                  :disabled="submitting"
-                  class="w-full py-3 px-6 bg-gradient-to-r from-electric to-neon text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-electric/25 transition-all duration-300 transform hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  <svg v-if="submitting" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              <!-- NOT LOGGED IN: show login prompt -->
+              <div v-if="!customer" class="flex flex-col items-center justify-center py-10 text-center space-y-4">
+                <div class="w-16 h-16 rounded-full bg-electric/10 flex items-center justify-center">
+                  <svg class="w-8 h-8 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                   </svg>
-                  {{ submitting ? 'Mengirim...' : 'Kirim Ulasan' }}
-                </button>
-              </form>
+                </div>
+                <div>
+                  <p class="text-white font-semibold">Login untuk memberi ulasan</p>
+                  <p class="text-gray-400 text-sm mt-1">Anda perlu login sebagai pelanggan untuk menulis ulasan produk ini.</p>
+                </div>
+                <a :href="reviewLoginUrl"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-electric to-neon text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-electric/25 transition-all duration-300">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                  Login / Daftar
+                </a>
+              </div>
+
+              <!-- LOGGED IN: show form -->
+              <div v-else>
+                <!-- Logged-in info banner -->
+                <div class="mb-5 flex items-center gap-3 px-4 py-3 rounded-xl bg-electric/5 border border-electric/20">
+                  <div class="w-9 h-9 rounded-full bg-gradient-to-br from-electric to-neon flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {{ customer.name.charAt(0).toUpperCase() }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-white text-sm font-semibold truncate">{{ customer.name }}</p>
+                    <p class="text-gray-400 text-xs truncate">{{ customer.email }}</p>
+                  </div>
+                  <span class="ml-auto text-xs text-neon bg-neon/10 border border-neon/20 px-2 py-0.5 rounded-full flex-shrink-0">Verified</span>
+                </div>
+
+                <form @submit.prevent="submitReview" class="space-y-4">
+                  <!-- Star picker -->
+                  <div>
+                    <label class="block text-sm text-gray-400 mb-2">Rating *</label>
+                    <div class="flex items-center gap-1">
+                      <button
+                        v-for="star in 5"
+                        :key="star"
+                        type="button"
+                        @click="form.rating = star"
+                        @mouseover="hoverRating = star"
+                        @mouseleave="hoverRating = 0"
+                        :class="['w-9 h-9 transition-all duration-150 transform hover:scale-125 focus:outline-none', (hoverRating || form.rating) >= star ? 'text-amber' : 'text-gray-600']"
+                      >
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                      </button>
+                      <span class="ml-2 text-sm text-gray-400">{{ ratingLabels[form.rating] || 'Pilih rating' }}</span>
+                    </div>
+                    <p v-if="errors.rating" class="mt-1 text-xs text-red-400">{{ errors.rating }}</p>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm text-gray-400 mb-1.5">Ulasan *</label>
+                    <textarea
+                      v-model="form.comment"
+                      rows="4"
+                      placeholder="Ceritakan pengalaman Anda dengan produk ini..."
+                      class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-electric/50 focus:border-electric/50 transition-colors text-sm resize-none"
+                    ></textarea>
+                    <p v-if="errors.comment" class="mt-1 text-xs text-red-400">{{ errors.comment }}</p>
+                    <p class="mt-1 text-xs text-gray-600">{{ form.comment.length }}/1000 karakter</p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    :disabled="submitting"
+                    class="w-full py-3 px-6 bg-gradient-to-r from-electric to-neon text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-electric/25 transition-all duration-300 transform hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <svg v-if="submitting" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
+                    {{ submitting ? 'Mengirim...' : 'Kirim Ulasan' }}
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
 
@@ -257,11 +268,11 @@
                 <div class="flex items-center gap-3">
                   <!-- Avatar -->
                   <div class="w-10 h-10 rounded-full bg-gradient-to-br from-electric to-neon flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">
-                    {{ review.reviewer_name.charAt(0).toUpperCase() }}
+                    {{ review.censored_name.charAt(0).toUpperCase() }}
                   </div>
                   <div>
                     <div class="flex items-center gap-2">
-                      <p class="text-white font-medium text-sm">{{ review.reviewer_name }}</p>
+                      <p class="text-white font-medium text-sm">{{ review.censored_name }}</p>
                       <span v-if="review.is_verified" class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-neon/10 text-neon">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         Verified
@@ -294,13 +305,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router, Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { router, Link, usePage } from '@inertiajs/vue3';
 import NavBar from './Components/NavBar.vue';
 import FooterSection from './Components/FooterSection.vue';
 import { useCart } from '../Composables/useCart';
 
 const { addToCart } = useCart();
+const page = usePage();
+const customer = computed(() => page.props.auth?.customer || null);
 
 const props = defineProps({
   product:            { type: Object, required: true },
@@ -309,6 +322,7 @@ const props = defineProps({
   ratingDistribution: { type: Object, default: () => ({}) },
   categories:         { type: Array, default: () => [] },
 });
+const reviewLoginUrl = computed(() => `/customer/auth?redirect=${encodeURIComponent(`/products/${props.product.slug}#reviews`)}`);
 
 // ── Review form state ──────────────────────────────────────────
 const hoverRating = ref(0);
@@ -316,10 +330,8 @@ const submitting  = ref(false);
 const errors      = ref({});
 
 const form = ref({
-  reviewer_name:  '',
-  reviewer_email: '',
-  rating:         0,
-  comment:        '',
+  rating:  0,
+  comment: '',
 });
 
 const ratingLabels = {
@@ -335,20 +347,17 @@ const submitReview = () => {
 
   // Client-side validation
   if (!form.value.rating) { errors.value.rating = 'Pilih rating terlebih dahulu.'; }
-  if (!form.value.reviewer_name.trim()) { errors.value.reviewer_name = 'Nama wajib diisi.'; }
   if (!form.value.comment.trim() || form.value.comment.length < 10) { errors.value.comment = 'Ulasan minimal 10 karakter.'; }
   if (Object.keys(errors.value).length) return;
 
   submitting.value = true;
 
   router.post(`/products/${props.product.slug}/review`, {
-    reviewer_name:  form.value.reviewer_name,
-    reviewer_email: form.value.reviewer_email,
-    rating:         form.value.rating,
-    comment:        form.value.comment,
+    rating:  form.value.rating,
+    comment: form.value.comment,
   }, {
     onSuccess: () => {
-      form.value = { reviewer_name: '', reviewer_email: '', rating: 0, comment: '' };
+      form.value = { rating: 0, comment: '' };
       submitting.value = false;
     },
     onError: (e) => {

@@ -30,7 +30,7 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4 mb-12">
-            <a
+            <Link
               href="/products"
               class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-electric to-neon text-white font-semibold rounded-2xl hover:shadow-xl hover:shadow-electric/25 transition-all duration-300 transform hover:scale-105 animate-pulse-glow"
               id="hero-shop-btn"
@@ -39,28 +39,11 @@
               <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
-          </div>
-
-          <!-- Stats -->
-          <div class="grid grid-cols-3 gap-6">
-            <div v-for="stat in stats" :key="stat.label">
-              <div class="text-2xl sm:text-3xl font-[Outfit] font-bold text-white">{{ stat.value }}</div>
-              <div class="text-sm text-gray-500 mt-1">{{ stat.label }}</div>
-            </div>
+            </Link>
           </div>
         </div>
-
-    
         <div class="relative animate-slide-in-right flex justify-center lg:justify-end">
           <div class="relative">
-            <!-- Glow ring behind shoe -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-72 h-72 sm:w-96 sm:h-96 rounded-full border border-electric/20 animate-pulse"></div>
-            </div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-56 h-56 sm:w-80 sm:h-80 rounded-full border border-neon/10"></div>
-            </div>
             <!-- Shoe Image -->
             <img
               :src="heroImage"
@@ -95,5 +78,11 @@
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3';
 const heroImage = '/images/hero-shoe.png';
+const stats = [
+  { value: '500+', label: 'Produk Tersedia' },
+  { value: '10K+', label: 'Pelanggan Puas' },
+  { value: '4.9★', label: 'Rating Rata-rata' },
+];
 </script>

@@ -9,6 +9,9 @@ use App\Http\Controllers\Admin\StockMovController;
 use App\Http\Controllers\Admin\ReviewsController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Auth\CustomerAuthController;
+use App\Http\Controllers\Admin\CustomersController;
+use App\Http\Controllers\CustomerProfileController;
 
 use App\Http\Controllers\ProductDetailController;
 use Inertia\Inertia;
@@ -75,11 +78,23 @@ Route::get('/products/{slug}', [ProductDetailController::class, 'show'])->name('
 Route::post('/products/{slug}/review', [ProductDetailController::class, 'storeReview'])->name('product.review.store');
 
 // Checkout & Orders
-Route::get('/checkout', function () {
-    return Inertia::render('Checkout');
-})->name('checkout');
-Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
-Route::get('/checkout/success/{orderNumber}', [OrderController::class, 'success'])->name('checkout.success');
+Route::middleware('auth:customer')->group(function () {
+    Route::get('/checkout', function () {
+        return Inertia::render('Checkout');
+    })->name('checkout');
+    Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/success/{orderNumber}', [OrderController::class, 'success'])->name('checkout.success');
+    Route::get('/customer/profile', [CustomerProfileController::class, 'edit'])->name('customer.profile.edit');
+    Route::put('/customer/profile/name', [CustomerProfileController::class, 'updateName'])->name('customer.profile.updateName');
+    Route::put('/customer/profile/password', [CustomerProfileController::class, 'updatePassword'])->name('customer.profile.updatePassword');
+    Route::delete('/customer/profile', [CustomerProfileController::class, 'destroy'])->name('customer.profile.destroy');
+});
+
+// Customer Auth
+Route::get('/customer/auth', [CustomerAuthController::class, 'show'])->name('customer.auth');
+Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('customer.login');
+Route::post('/customer/register', [CustomerAuthController::class, 'register'])->name('customer.register');
+Route::post('/customer/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
 
 // FAQ page
 Route::get('/faq', function () {
@@ -114,4 +129,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+    
+    // Customers
+    Route::get('/customers', [CustomersController::class, 'index'])->name('customers.index');
+    Route::delete('/customers/{customer}', [CustomersController::class, 'destroy'])->name('customers.destroy');
 });

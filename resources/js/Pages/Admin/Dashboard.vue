@@ -112,7 +112,7 @@
 <script setup>
 import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
-import { Package, FolderTree, Tag, PenIcon, MessageCircle } from "lucide-vue-next";
+import { Package, FolderTree, Tag, PenIcon, MessageCircle, Users } from "lucide-vue-next";
 import AdminLayout from "../../Admin/Components/AdminLayout.vue";
 
 const props = defineProps({
@@ -143,6 +143,7 @@ const quickActions = [
     { icon: Package, label: "Produk", href: "/admin/products" },
     { icon: FolderTree, label: "Kategori", href: "/admin/categories" },
     { icon: MessageCircle, label: "Review", href: "/admin/reviews" },
+    { icon: Users, label: "Pelanggan", href: "/admin/customers" },
     { icon: Tag, label: "Stok Produk", href: "/admin/stock" },
     { icon: PenIcon, label: "Pencatatan Stok", href: "/admin/stockmov" },
 ];

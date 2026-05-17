@@ -8,6 +8,7 @@ class Order extends Model
 {
     protected $fillable = [
         'order_number',
+        'customer_id',
         'customer_name',
         'customer_phone',
         'customer_address',
@@ -18,6 +19,11 @@ class Order extends Model
         'total_amount',
         'notes',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(\App\Models\Customer::class);
+    }
 
     public function items()
     {

@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\StockMove;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -58,6 +59,7 @@ class OrderController extends Controller
                 // Create order
                 $order = Order::create([
                     'order_number'     => Order::generateOrderNumber(),
+                    'customer_id'      => Auth::guard('customer')->check() ? Auth::guard('customer')->id() : null,
                     'customer_name'    => $validated['customer_name'],
                     'customer_phone'   => $validated['customer_phone'],
                     'customer_address' => $validated['customer_address'],

@@ -348,7 +348,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { useCart } from '../Composables/useCart';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -372,11 +372,13 @@ const {
   removeFromCart,
   clearCart,
 } = useCart();
+const page = usePage();
+const customer = computed(() => page.props.auth?.customer || null);
 
 const form = useForm({
-  customer_name: '',
-  customer_phone: '',
-  customer_address: '',
+  customer_name: customer.value?.name || '',
+  customer_phone: customer.value?.phone || '',
+  customer_address: customer.value?.address || '',
   latitude: '',
   longitude: '',
   payment_method: '',

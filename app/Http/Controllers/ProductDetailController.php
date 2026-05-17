@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductReview;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProductDetailController extends Controller
@@ -29,8 +30,15 @@ class ProductDetailController extends Controller
 
         $categories = Category::orderBy('id')->limit(5)->get(['id', 'name']);
 
+        // Append censored_name to each review
+        $reviews = $product->reviews->map(function ($review) {
+            return array_merge($review->toArray(), [
+                'censored_name' => $review->censored_name,
+            ]);
+        });
+
         return Inertia::render('ProductDetail', [
-            'product'            => $product,
+            'product'            => array_merge($product->toArray(), ['reviews' => $reviews]),
             'averageRating'      => $averageRating,
             'totalReviews'       => $totalReviews,
             'ratingDistribution' => $ratingDistribution,
@@ -40,23 +48,29 @@ class ProductDetailController extends Controller
 
     public function storeReview(Request $request, string $slug)
     {
-        $product = Product::where('slug', $slug)->where('status', 'active')->firstOrFail();
-
-        $validated = $request->validate([
-            'reviewer_name' => 'required|string|max:100',
-            'reviewer_email'=> 'nullable|email|max:150',
-            'rating'        => 'required|integer|min:1|max:5',
-            'comment'       => 'required|string|min:10|max:1000',
-        ]);
-
-        $validated['product_id'] = $product->id;
-
-        if (auth()->check()) {
-            $validated['user_id']    = auth()->id();
-            $validated['is_verified']= true;
+        // Must be logged in as customer
+        if (!Auth::guard('customer')->check()) {
+            $redirectToReviewSection = route('product.show', ['slug' => $slug]) . '#reviews';
+            return redirect()->route('customer.auth', ['redirect' => $redirectToReviewSection])
+                ->with('error', 'Login terlebih dahulu untuk memberikan ulasan.');
         }
 
-        ProductReview::create($validated);
+        $customer = Auth::guard('customer')->user();
+        $product  = Product::where('slug', $slug)->where('status', 'active')->firstOrFail();
+
+        $validated = $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|min:10|max:1000',
+        ]);
+
+        ProductReview::create([
+            'product_id'    => $product->id,
+            'customer_id'   => $customer->id,
+            'reviewer_name' => $customer->name,
+            'rating'        => $validated['rating'],
+            'comment'       => $validated['comment'],
+            'is_verified'   => true,
+        ]);
 
         return back()->with('success', 'Ulasan berhasil ditambahkan! Terima kasih.');
     }
