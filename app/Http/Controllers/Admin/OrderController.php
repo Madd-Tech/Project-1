@@ -79,6 +79,12 @@ class OrderController extends Controller
             'status' => 'required|in:pending,confirmed,processing,completed,cancelled',
         ]);
 
+        if (str_contains((string) $order->notes, '[Cancelled by customer]')) {
+            return back()->withErrors([
+                'status' => "Status pesanan {$order->order_number} tidak dapat diubah karena dibatalkan oleh customer.",
+            ]);
+        }
+
         // If cancelling, restore stock
         if ($validated['status'] === 'cancelled' && $order->status !== 'cancelled') {
             foreach ($order->items as $item) {

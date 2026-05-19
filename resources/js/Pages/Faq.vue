@@ -194,13 +194,13 @@ const faqs = [
     category: 'order',
     icon: ShoppingCart,
     question: 'Bagaimana cara memesan produk di BubuihanStore?',
-    answer: 'Anda cukup memilih produk yang diinginkan, tentukan jumlahnya, lalu klik tombol "Pesan via WhatsApp". Pesanan Anda akan otomatis terkirim ke WhatsApp kami beserta detail produk dan jumlah yang dipilih. Tim kami akan segera memproses pesanan Anda.',
+    answer: 'Anda cukup memilih produk yang diinginkan, tentukan jumlahnya, lalu klik tombol "Checkout". Pesanan Anda akan otomatis terkirim ke Pendataan kami, dan Admin akan mengkonfirmasi pesanan anda dengan mengirimkan no rekening ke whatsapp anda.',
   },
   {
     category: 'order',
     icon: Smartphone,
     question: 'Apakah saya perlu membuat akun untuk berbelanja?',
-    answer: 'Tidak perlu! Anda bisa langsung berbelanja tanpa perlu mendaftar atau membuat akun. Cukup pilih produk dan pesan langsung via WhatsApp. Mudah dan cepat!',
+    answer: 'Iya, anda perlu membuat akun terlebih dahulu untuk berbelanja.',
   },
   {
     category: 'order',
@@ -226,12 +226,6 @@ const faqs = [
     icon: CreditCard,
     question: 'Metode pembayaran apa saja yang tersedia?',
     answer: 'Saat ini kami menerima pembayaran melalui transfer bank (BCA, BNI, Mandiri, BRI), e-wallet (GoPay, OVO, Dana, ShopeePay). Detail pembayaran akan diinformasikan saat Anda menghubungi kami via WhatsApp.',
-  },
-  {
-    category: 'payment',
-    icon: Lock,
-    question: 'Apakah pembayaran di BubuihanStore aman?',
-    answer: 'Ya, sangat aman. Semua transaksi dilakukan langsung melalui WhatsApp dan transfer bank resmi. Kami tidak menyimpan data finansial apapun dari pelanggan. Konfirmasi pembayaran juga dilakukan secara real-time.',
   },
   {
     category: 'return',

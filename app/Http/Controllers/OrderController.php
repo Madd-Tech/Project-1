@@ -103,4 +103,49 @@ class OrderController extends Controller
             'order' => $order,
         ]);
     }
+
+    public function cancel(Request $request, string $orderNumber)
+    {
+        $customer = Auth::guard('customer')->user();
+        $customerCancelledMarker = '[Cancelled by customer]';
+
+        $order = Order::with('items.product')
+            ->where('order_number', $orderNumber)
+            ->where('customer_id', $customer->id)
+            ->firstOrFail();
+
+        if (in_array($order->status, ['completed', 'cancelled'], true)) {
+            return back()->withErrors([
+                'order' => 'Pesanan tidak dapat dibatalkan.',
+            ]);
+        }
+
+        DB::transaction(function () use ($order, $customerCancelledMarker) {
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $item->product->increment('stock', $item->quantity);
+                    StockMove::create([
+                        'product_id' => $item->product_id,
+                        'type' => 'produk masuk',
+                        'quantity' => $item->quantity,
+                        'reference' => 'Pembatalan pesanan customer - ' . $order->order_number,
+                    ]);
+                }
+            }
+
+            $updatedNotes = trim((string) $order->notes);
+            if (!str_contains($updatedNotes, $customerCancelledMarker)) {
+                $updatedNotes = $updatedNotes !== ''
+                    ? $updatedNotes . ' ' . $customerCancelledMarker
+                    : $customerCancelledMarker;
+            }
+
+            $order->update([
+                'status' => 'cancelled',
+                'notes' => $updatedNotes,
+            ]);
+        });
+
+        return back()->with('success', "Pesanan {$order->order_number} berhasil dibatalkan.");
+    }
 }

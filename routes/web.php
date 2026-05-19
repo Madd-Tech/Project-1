@@ -83,6 +83,7 @@ Route::middleware('auth:customer')->group(function () {
         return Inertia::render('Checkout');
     })->name('checkout');
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
+    Route::put('/orders/{orderNumber}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/checkout/success/{orderNumber}', [OrderController::class, 'success'])->name('checkout.success');
     Route::get('/customer/profile', [CustomerProfileController::class, 'edit'])->name('customer.profile.edit');
     Route::put('/customer/profile/name', [CustomerProfileController::class, 'updateName'])->name('customer.profile.updateName');

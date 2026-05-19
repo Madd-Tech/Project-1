@@ -98,24 +98,34 @@
                                 </td>
                                 <td class="px-6 py-4 text-white font-medium text-sm">Rp {{ formatPrice(order.total_amount) }}</td>
                                 <td class="px-6 py-4">
-                                    <select
-                                        :value="order.status"
-                                        @change="updateStatus(order, $event.target.value)"
-                                        :class="['px-2.5 py-1 text-xs font-bold rounded-lg border cursor-pointer appearance-none', statusClass(order.status)]"
-                                    >
-                                        <option value="pending">Pending</option>
-                                        <option value="confirmed">Confirmed</option>
-                                        <option value="processing">Processing</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
-                                    </select>
+                                    <div class="space-y-1">
+                                        <select
+                                            :value="order.status"
+                                            @change="updateStatus(order, $event.target.value)"
+                                            :disabled="isCancelledByCustomer(order)"
+                                            :class="[
+                                                'px-2.5 py-1 text-xs font-bold rounded-lg border appearance-none',
+                                                isCancelledByCustomer(order) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
+                                                statusClass(order.status)
+                                            ]"
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                        <p v-if="isCancelledByCustomer(order)" class="text-[10px] text-red-300">
+                                            Cancelled by customer
+                                        </p>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-xs text-gray-400 whitespace-nowrap">{{ formatDate(order.created_at) }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <!-- Confirm Button: only for pending orders -->
+                                        <!-- Confirm Button: only for pending transfer orders -->
                                         <button
-                                            v-if="order.status === 'pending'"
+                                            v-if="order.status === 'pending' && order.payment_method === 'transfer'"
                                             @click="confirmOrder(order)"
                                             class="flex items-center gap-1.5 px-3 py-1.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 hover:border-[#25D366]/60 text-[#25D366] text-xs font-semibold rounded-lg transition-all duration-200"
                                             title="Konfirmasi & kirim no rekening via WhatsApp"
@@ -200,6 +210,10 @@
                 <div v-if="selectedOrder.notes" class="p-4 bg-dark-900/50 rounded-xl border border-dark-600/50">
                     <p class="text-xs text-gray-400 mb-1">Catatan</p>
                     <p class="text-gray-200 text-sm">{{ selectedOrder.notes }}</p>
+                </div>
+                <div v-if="isCancelledByCustomer(selectedOrder)" class="p-4 bg-red-500/5 rounded-xl border border-red-500/20">
+                    <p class="text-xs text-red-300 font-semibold uppercase tracking-wider">Status Note</p>
+                    <p class="text-red-200 text-sm mt-1">Cancelled by customer</p>
                 </div>
                 <!-- Items -->
                 <div class="p-4 bg-dark-900/50 rounded-xl border border-dark-600/50">
@@ -360,6 +374,7 @@ const confirmOrder = (order) => {
         preserveState: true,
         replace: true,
         onSuccess: () => {
+            if (order.payment_method !== 'transfer') return;
             const phone = formatPhoneForWa(order.customer_phone);
             const message = encodeURIComponent(buildTransferMessage(order));
             window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
@@ -369,6 +384,8 @@ const confirmOrder = (order) => {
 
 // Status update (dropdown — only triggers WhatsApp for transfer→confirmed)
 const updateStatus = (order, status) => {
+    if (isCancelledByCustomer(order)) return;
+
     const isTransferConfirm = status === 'confirmed' && order.payment_method === 'transfer';
 
     router.put(`/admin/orders/${order.id}/status`, { status }, {
@@ -382,6 +399,10 @@ const updateStatus = (order, status) => {
             }
         },
     });
+};
+
+const isCancelledByCustomer = (order) => {
+    return (order?.notes || '').includes('[Cancelled by customer]');
 };
 
 const formatPrice = (p) => new Intl.NumberFormat('id-ID').format(Math.round(p));

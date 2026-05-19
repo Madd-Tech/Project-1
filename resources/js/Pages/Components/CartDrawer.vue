@@ -47,8 +47,33 @@
         </button>
       </div>
 
+      <div class="px-6 pt-4">
+        <div class="grid grid-cols-2 p-1 rounded-xl border border-white/10 bg-dark-800/80">
+          <button
+            @click="activeTab = 'cart'"
+            class="py-2 text-xs font-semibold rounded-lg transition-all"
+            :class="activeTab === 'cart' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'"
+          >
+            Cart
+          </button>
+          <button
+            @click="activeTab = 'orders'"
+            class="relative py-2 text-xs font-semibold rounded-lg transition-all"
+            :class="activeTab === 'orders' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'"
+          >
+            Order Status
+            <span
+              v-if="pendingOrders.length > 0"
+              class="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[10px] leading-4 rounded-full text-center"
+            >
+              {{ pendingOrders.length > 9 ? '9+' : pendingOrders.length }}
+            </span>
+          </button>
+        </div>
+      </div>
+
       <!-- Cart Items -->
-      <div class="flex-1 overflow-y-auto p-6 space-y-4">
+      <div v-if="activeTab === 'cart'" class="flex-1 overflow-y-auto p-6 space-y-4">
         <!-- Empty State -->
         <div v-if="items.length === 0" class="flex flex-col items-center justify-center h-full text-center py-12">
           <div class="w-20 h-20 rounded-2xl bg-dark-700 flex items-center justify-center mb-4">
@@ -125,8 +150,116 @@
         </transition-group>
       </div>
 
+      <!-- Orders Tab -->
+      <div v-else class="flex-1 overflow-y-auto p-6 space-y-3">
+        <div class="flex items-center justify-between">
+          <p class="text-xs text-gray-400">
+            {{ visibleCustomerOrders.length }} order
+          </p>
+          <button
+            v-if="nonPendingOrders.length > 0"
+            @click="clearOrderStatus"
+            class="px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-red-500/30 text-red-300 hover:bg-red-500/10 transition-colors"
+          >
+            Clear Non-Pending
+          </button>
+        </div>
+
+        <div v-if="visibleCustomerOrders.length === 0" class="flex flex-col items-center justify-center h-full text-center py-12">
+          <div class="w-20 h-20 rounded-2xl bg-dark-700 flex items-center justify-center mb-4">
+            <svg class="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6M8 4h8a2 2 0 012 2v12a2 2 0 01-2 2H8a2 2 0 01-2-2V6a2 2 0 012-2z" />
+            </svg>
+          </div>
+          <h3 class="text-white font-semibold mb-1">Belum Ada Order</h3>
+          <p class="text-gray-500 text-sm">Status checkout akan muncul di sini</p>
+        </div>
+
+        <div v-if="pendingOrders.length > 0" class="space-y-3">
+          <p class="text-xs font-semibold uppercase tracking-wide text-red-300">Pending Orders</p>
+          <div
+            v-for="order in pendingOrders"
+            :key="order.order_number"
+            class="glass-card rounded-2xl p-4 border border-red-500/20"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-[11px] text-gray-500 uppercase tracking-wide">Order</p>
+                <p class="text-white text-sm font-semibold">{{ order.order_number }}</p>
+                <p class="text-gray-500 text-xs mt-1">{{ formatDate(order.created_at) }}</p>
+              </div>
+              <span
+                class="px-2.5 py-1 text-[11px] rounded-full border font-semibold uppercase tracking-wide"
+                :class="getOrderStatusClass(order.status)"
+              >
+                {{ getOrderStatusLabel(order.status) }}
+              </span>
+            </div>
+            <div class="mt-3 pt-3 border-t border-white/5 flex justify-between text-xs">
+              <span class="text-gray-400">Total</span>
+              <span class="text-white font-semibold">Rp {{ formatPrice(order.total_amount) }}</span>
+            </div>
+            <button
+              v-if="canCancelOrder(order)"
+              @click="cancelOrder(order.order_number)"
+              :disabled="cancellingOrderNumber === order.order_number"
+              class="mt-3 w-full px-3 py-2 text-xs font-semibold rounded-lg border border-red-500/30 text-red-300 hover:bg-red-500/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {{ cancellingOrderNumber === order.order_number ? 'Cancelling...' : 'Cancel Order' }}
+            </button>
+          </div>
+        </div>
+
+        <div v-if="nonPendingOrders.length > 0" class="space-y-3">
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-300">Other Status</p>
+          <div
+            v-for="order in nonPendingOrders"
+            :key="order.order_number"
+            class="glass-card rounded-2xl p-4 border border-white/10"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-[11px] text-gray-500 uppercase tracking-wide">Order</p>
+                <p class="text-white text-sm font-semibold">{{ order.order_number }}</p>
+                <p class="text-gray-500 text-xs mt-1">{{ formatDate(order.created_at) }}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span
+                  class="px-2.5 py-1 text-[11px] rounded-full border font-semibold uppercase tracking-wide"
+                  :class="getOrderStatusClass(order.status)"
+                >
+                  {{ getOrderStatusLabel(order.status) }}
+                </span>
+                <button
+                  @click="deleteOrderStatus(order.order_number)"
+                  class="w-7 h-7 rounded-lg border border-red-500/30 text-red-300 hover:bg-red-500/10 transition-colors flex items-center justify-center"
+                  title="Delete status"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-white/5 flex justify-between text-xs">
+              <span class="text-gray-400">Total</span>
+              <span class="text-white font-semibold">Rp {{ formatPrice(order.total_amount) }}</span>
+            </div>
+            <button
+              v-if="canCancelOrder(order)"
+              @click="cancelOrder(order.order_number)"
+              :disabled="cancellingOrderNumber === order.order_number"
+              class="mt-3 w-full px-3 py-2 text-xs font-semibold rounded-lg border border-red-500/30 text-red-300 hover:bg-red-500/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {{ cancellingOrderNumber === order.order_number ? 'Cancelling...' : 'Cancel Order' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+
       <!-- Footer -->
-      <div v-if="items.length > 0" class="border-t border-white/5 p-6 space-y-4">
+      <div v-if="activeTab === 'cart' && items.length > 0" class="border-t border-white/5 p-6 space-y-4">
         <!-- Totals -->
         <div class="space-y-2">
          
@@ -184,6 +317,8 @@
 </template>
 
 <script setup>
+import { computed, ref } from 'vue';
+import { usePage, router } from '@inertiajs/vue3';
 import { useCart } from '../../Composables/useCart';
 
 const {
@@ -199,7 +334,89 @@ const {
   closeDrawer,
 } = useCart();
 
+const page = usePage();
+const activeTab = ref('cart');
+const customerOrders = computed(() => page.props.auth?.customer?.orders || []);
+const dismissedOrderNumbers = ref([]);
+const cancellingOrderNumber = ref(null);
+const dismissedStorageKey = computed(() => {
+  const customerId = page.props.auth?.customer?.id;
+  return customerId ? `dismissed_order_status_${customerId}` : null;
+});
+
+if (typeof window !== 'undefined' && dismissedStorageKey.value) {
+  try {
+    const raw = window.localStorage.getItem(dismissedStorageKey.value);
+    dismissedOrderNumbers.value = raw ? JSON.parse(raw) : [];
+  } catch {
+    dismissedOrderNumbers.value = [];
+  }
+}
+
+const visibleCustomerOrders = computed(() =>
+  customerOrders.value.filter((order) => !dismissedOrderNumbers.value.includes(order.order_number))
+);
+const pendingOrders = computed(() => visibleCustomerOrders.value.filter((order) => order.status === 'pending'));
+const nonPendingOrders = computed(() => visibleCustomerOrders.value.filter((order) => order.status !== 'pending'));
+
+const clearOrderStatus = () => {
+  const numbers = nonPendingOrders.value.map((order) => order.order_number);
+  dismissedOrderNumbers.value = [...new Set([...dismissedOrderNumbers.value, ...numbers])];
+
+  if (typeof window !== 'undefined' && dismissedStorageKey.value) {
+    window.localStorage.setItem(dismissedStorageKey.value, JSON.stringify(dismissedOrderNumbers.value));
+  }
+};
+
+const deleteOrderStatus = (orderNumber) => {
+  dismissedOrderNumbers.value = [...new Set([...dismissedOrderNumbers.value, orderNumber])];
+  if (typeof window !== 'undefined' && dismissedStorageKey.value) {
+    window.localStorage.setItem(dismissedStorageKey.value, JSON.stringify(dismissedOrderNumbers.value));
+  }
+};
+
+const cancelOrder = (orderNumber) => {
+  if (cancellingOrderNumber.value) return;
+
+  cancellingOrderNumber.value = orderNumber;
+  router.put(`/orders/${orderNumber}/cancel`, {}, {
+    preserveState: true,
+    preserveScroll: true,
+    replace: true,
+    onFinish: () => {
+      cancellingOrderNumber.value = null;
+    },
+  });
+};
+
+const canCancelOrder = (order) => {
+  return order?.status !== 'completed' && order?.status !== 'cancelled';
+};
+
+const getOrderStatusLabel = (status) => {
+  if (status === 'pending') return 'Pending';
+  if (status === 'cancelled') return 'Cancelled';
+  if (status === 'confirmed') return 'Confirmed';
+  if (status === 'processing') return 'Processing';
+  if (status === 'completed') return 'Completed';
+  return status;
+};
+
+const getOrderStatusClass = (status) => {
+  if (status === 'cancelled') return 'border-red-500/30 bg-red-500/10 text-red-300';
+  if (status === 'pending') return 'border-amber-500/30 bg-amber-500/10 text-amber-300';
+  if (status === 'confirmed') return 'border-blue-500/30 bg-blue-500/10 text-blue-300';
+  if (status === 'processing') return 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300';
+  if (status === 'completed') return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300';
+  return 'border-white/20 bg-white/5 text-gray-300';
+};
+
 const formatPrice = (price) => {
   return new Intl.NumberFormat('id-ID').format(Math.round(price));
+};
+
+const formatDate = (value) => {
+  if (!value) return '-';
+  return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
 };
 </script>
