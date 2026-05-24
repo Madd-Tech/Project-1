@@ -121,6 +121,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', ProductsController::class)->except(['create', 'show', 'edit', 'update']);
     Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
     Route::put('/stock/{product}', [StockController::class, 'update'])->name('stock.update');
+    Route::get('/stockmov/export-pdf', [StockMovController::class, 'exportPdf'])->name('stockmov.exportPdf');
     Route::get('/stockmov', [StockMovController::class, 'index'])->name('stockmov.index');
     Route::post('/categories/{category}/toggle-featured', [CategoriesController::class, 'toggleFeatured'])->name('categories.toggleFeatured');
     Route::get('/reviews', [ReviewsController::class, 'index'])->name('reviews.index');
